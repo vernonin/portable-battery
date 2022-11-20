@@ -1,6 +1,7 @@
 import TabsView from '@/layouts/tabs/TabsView'
 import BlankView from '@/layouts/BlankView'
-import PageView from '@/layouts/PageView'
+import PageView from '@/layouts/BlankView'
+// import PageView from '@/layouts/PageView'
 
 // 路由配置
 const options = {
@@ -139,71 +140,6 @@ const options = {
           ]
         },
         {
-          path: 'details',
-          name: '详情页',
-          meta: {
-            icon: 'profile'
-          },
-          component: BlankView,
-          children: [
-            {
-              path: 'basic',
-              name: '基础详情页',
-              component: () => import('@/pages/detail/BasicDetail')
-            },
-            {
-              path: 'advance',
-              name: '高级详情页',
-              component: () => import('@/pages/detail/AdvancedDetail')
-            }
-          ]
-        },
-        {
-          path: 'result',
-          name: '结果页',
-          meta: {
-            icon: 'check-circle-o',
-          },
-          component: PageView,
-          children: [
-            {
-              path: 'success',
-              name: '成功',
-              component: () => import('@/pages/result/Success')
-            },
-            {
-              path: 'error',
-              name: '失败',
-              component: () => import('@/pages/result/Error')
-            }
-          ]
-        },
-        {
-          path: 'exception',
-          name: '异常页',
-          meta: {
-            icon: 'warning',
-          },
-          component: BlankView,
-          children: [
-            {
-              path: '404',
-              name: 'Exp404',
-              component: () => import('@/pages/exception/404')
-            },
-            {
-              path: '403',
-              name: 'Exp403',
-              component: () => import('@/pages/exception/403')
-            },
-            {
-              path: '500',
-              name: 'Exp500',
-              component: () => import('@/pages/exception/500')
-            }
-          ]
-        },
-        {
           path: 'components',
           name: '内置组件',
           meta: {
@@ -229,53 +165,29 @@ const options = {
           ]
         },
         {
-          name: '验权表单',
-          path: 'auth/form',
+          path: 'system',
+          name: '系统管理',
           meta: {
-            icon: 'file-excel',
-            authority: {
-              permission: 'form'
-            }
+            icon: 'setting'
           },
-          component: () => import('@/pages/form/basic')
-        },
-        {
-          name: '带参菜单',
-          path: 'router/query',
-          meta: {
-            icon: 'project',
-            query: {
-              name: '菜单默认参数'
-            }
-          },
-          component: () => import('@/pages/Demo')
-        },
-        {
-          name: '动态路由菜单',
-          path: 'router/dynamic/:id',
-          meta: {
-            icon: 'project',
-            params: {
-              id: 123
-            }
-          },
-          component: () => import('@/pages/Demo')
-        },
-        {
-          name: 'Ant Design Vue',
-          path: 'antdv',
-          meta: {
-            icon: 'ant-design',
-            link: 'https://www.antdv.com/docs/vue/introduce-cn/'
-          }
-        },
-        {
-          name: '使用文档',
-          path: 'document',
-          meta: {
-            icon: 'file-word',
-            link: 'https://iczer.gitee.io/vue-antd-admin-docs/'
-          }
+          component: PageView,
+          children: [
+            {
+              path: 'user',
+              name: '用户管理',
+              component: () => import('@/pages/system/User')
+            },
+            {
+              path: 'role',
+              name: '角色管理',
+              component: () => import('@/pages/system/Role')
+            },
+            {
+              path: 'menu',
+              name: '菜单管理',
+              component: () => import('@/pages/system/Menu')
+            },
+          ]
         }
       ]
     },

@@ -12,6 +12,7 @@
       <setting />
     </drawer>
     <a-layout class="admin-layout-main beauty-scroll">
+      <!-- 头部 -->
       <admin-header :class="[{'fixed-tabs': fixedTabs, 'fixed-header': fixedHeader, 'multi-page': multiPage}]" :style="headerStyle" :menuData="headMenuData" :collapsed="collapsed" @toggleCollapse="toggleCollapse"/>
       <a-layout-header :class="['virtual-header', {'fixed-tabs' : fixedTabs, 'fixed-header': fixedHeader, 'multi-page': multiPage}]" v-show="fixedHeader"></a-layout-header>
       <a-layout-content class="admin-layout-content" :style="`min-height: ${minHeight}px;`">
@@ -19,16 +20,12 @@
           <slot></slot>
         </div>
       </a-layout-content>
-      <a-layout-footer style="padding: 0px">
-        <page-footer :link-list="footerLinks" :copyright="copyright" />
-      </a-layout-footer>
     </a-layout>
   </a-layout>
 </template>
 
 <script>
 import AdminHeader from './header/AdminHeader'
-import PageFooter from './footer/PageFooter'
 import Drawer from '../components/tool/Drawer'
 import SideMenu from '../components/menu/SideMenu'
 import Setting from '../components/setting/Setting'
@@ -38,7 +35,7 @@ import {mapState, mapMutations, mapGetters} from 'vuex'
 
 export default {
   name: 'AdminLayout',
-  components: {Setting, SideMenu, Drawer, PageFooter, AdminHeader},
+  components: {SideMenu, Setting, Drawer, AdminHeader},
   data () {
     return {
       minHeight: window.innerHeight - 64 - 122,

@@ -51,7 +51,13 @@ module.exports = {
         name: '小組件',
         taskCard: {name: '任務卡片'},
         palette: {name: '顏色複選框'}
-      }
+      },
+      system: {
+        name: '系統管理',
+        user: {name: '用戶管理'},
+        role: {name: '角色管理'},
+        menu: {name: '選單管理'}
+      }      
     }
   }
 }

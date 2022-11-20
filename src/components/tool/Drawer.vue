@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <div :class="['mask', visible ? 'open' : 'close']" @click="close"></div>
     <div :class="['drawer', placement, visible ? 'open' : 'close']">
       <div ref="drawer" class="content beauty-scroll">
