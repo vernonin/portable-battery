@@ -3,9 +3,13 @@
     <SearchForm :form-data="searchFormData" />
     <!-- 按钮 -->
     <ButtonBar :btns="barbtns" @plus="onPlus" @batch="onBatch" @import="onImport" @export="onExport" />
-    <SelectAlert :num="2" @clear="clearSelected" />
+    <SelectAlert :num="selectedRowKeys.length" @clear="clearSelected" />
     <!-- 表格 -->
-    <a-table :columns="columns" :data-source="data">
+    <a-table
+      :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+      :columns="columns"
+      :data-source="data"
+    >
       <div slot="status" slot-scope="status">
         <a-badge status="success" v-if="status === '生效'"/>
         <a-badge status="default" v-else />
@@ -13,11 +17,14 @@
       </div>
 
       <div slot="action">
-        <a>编辑</a>
+        <a @click="onEdit">编辑</a>
         <a-divider type="vertical" />
         <a>失效</a>
       </div>
     </a-table>
+    <PlusUser :visible="openPlusUser" @cancel="openPlusUser = false" />
+    <EditUser :visible="openEditUser" @cancel="openEditUser = false" />
+    <ImportUser :visible="openImportUser" @cancel="openImportUser = false" />
   </div>
 </template>
 
@@ -25,6 +32,9 @@
   import SearchForm from './components/SearchForm.vue';
   import SelectAlert from './components/SelectAlert.vue';
   import ButtonBar from '@/components/tool/ButtonBar.vue';
+  import PlusUser from './components/PlusUser.vue';
+  import EditUser from './components/EditUser.vue';
+  import ImportUser from './components/ImportUser.vue';
 
   // 二维数组：第一层代表列，第二层代表每列的Form.Item
   const searchFormData = [
@@ -133,27 +143,39 @@
   export default {
     name: 'User',
     i18n: require('./i18n'),
-    components: { SearchForm, SelectAlert, ButtonBar },
+    components: { SearchForm, SelectAlert, ButtonBar, PlusUser, EditUser, ImportUser },
     data() {
       return {
         data,
         columns,
         barbtns,
         searchFormData,
+
+        openPlusUser: false,
+        openEditUser: false,
+        openImportUser: false,
+        selectedRowKeys: [],
       }
     },
     methods: {
+      onSelectChange(selectedRowKeys) {
+        this.selectedRowKeys = selectedRowKeys;
+      },
       clearSelected() {
-        console.log('clearSelected');
+        this.selectedRowKeys = [];
       },
       onPlus() {
         console.log('onPlus');
+        this.openPlusUser = true;
+      },
+      onEdit() {
+        this.openEditUser = true;
       },
       onBatch() {
         console.log('onBatch');
       },
       onImport() {
-        console.log('onImport');
+        this.openImportUser = true;
       },
       onExport() {
         console.log('onExport');
