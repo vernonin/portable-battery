@@ -17,9 +17,9 @@
       </div>
 
       <div slot="action">
-        <a @click="onEdit">编辑</a>
+        <a @click="onEdit">{{$t('edit')}}</a>
         <a-divider type="vertical" />
-        <a>失效</a>
+        <a>{{$t('invalid')}}</a>
       </div>
     </a-table>
     <PlusUser :visible="openPlusUser" @cancel="openPlusUser = false" />
