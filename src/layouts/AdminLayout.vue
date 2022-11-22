@@ -117,6 +117,8 @@ export default {
 
 <style lang="less" scoped>
   .admin-layout{
+    height: 100vh !important;
+    box-sizing: border-box;
     .side-menu{
       &.fixed-side{
         position: fixed;
@@ -147,7 +149,7 @@ export default {
       }
     }
     .admin-layout-content{
-      padding: 24px 24px 0;
+      padding: 0 24px;
       /*overflow-x: hidden;*/
       /*min-height: calc(100vh - 64px - 122px);*/
     }

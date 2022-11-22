@@ -107,7 +107,7 @@
   .tab{
     margin: 0 -16px;
     padding: 0 16px;
-    font-size: 14px;
+    font-size: 12.6px;
     user-select: none;
     transition: all 0.2s;
     .title{
@@ -143,7 +143,8 @@
     }
   }
   .tabs-container{
-    margin: -16px auto 8px;
+    margin-top: 2px;
+    margin-left: -10px;
     transition: top,left 0.2s;
     .header-lock{
       font-size: 18px;

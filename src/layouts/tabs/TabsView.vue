@@ -321,10 +321,27 @@ export default {
     }
   }
   .tabs-view-content{
+    transform: translateY(20px);
+    // max-height: calc(100vh - 130px);
+    // overflow-y: scroll;
     position: relative;
     &.head.fixed{
       width: 1400px;
       margin: 0 auto;
     }
+  }
+  .tabs-view-content::-webkit-scrollbar {
+    width : 6px;  /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+  }
+  .tabs-view-content::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      box-shadow: inset 0 0 5px rgba(106, 135, 214, 0.2);
+      background: #13c2c2;
+  }
+  .tabs-view-content::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px rgba(92, 119, 196, 0.2);
+    border-radius: 10px;
+    background-origin: #ededed;
   }
 </style>
