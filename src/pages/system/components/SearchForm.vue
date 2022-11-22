@@ -48,9 +48,6 @@
         form: this.$form.createForm(this, { name: 'coordinated' })
       }
     },
-    created() {
-      console.log('++', this.formData);
-    },
     methods: {
       handleReset() {
         console.log(this.form);

@@ -36,7 +36,6 @@
                 { rules: [{ required: true, message: $t('genderpl') }] },
               ]"
               :placeholder="$t('genderpl')"
-              @change="handleSelectChange"
             >
               <a-select-option value="male">{{$t('male')}}</a-select-option>
               <a-select-option value="female">{{$t('female')}}</a-select-option>
@@ -77,11 +76,6 @@
           if (!err) {
             console.log('Received values of form: ', values);
           }
-        });
-      },
-      handleSelectChange(value) {
-        this.form.setFieldsValue({
-          note: `Hi, ${value === 'male' ? 'man' : 'lady'}!`,
         });
       },
     }
