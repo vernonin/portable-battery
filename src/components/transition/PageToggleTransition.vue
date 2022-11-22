@@ -81,12 +81,12 @@
 <style lang="less">
   .page-toggle-enter-active{
     position: absolute !important;
-    animation-duration: 0.8s !important;
+    animation-duration: 0.5s !important;
     width: calc(100%) !important;
   }
   .page-toggle-leave-active{
     position: absolute !important;
-    animation-duration: 0.8s !important;
+    animation-duration: 0.5s !important;
     width: calc(100%) !important;
   }
   .page-toggle-enter{

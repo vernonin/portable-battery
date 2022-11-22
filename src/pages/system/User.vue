@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #fff;padding: 12px;margin-top: 20px;">
+  <div style="background-color: #fff;padding: 12px;">
     <SearchForm :form-data="searchFormData" />
     <!-- 按钮 -->
     <ButtonBar :btns="barbtns" @plus="onPlus" @batch="onBatch" @import="onImport" @export="onExport" />
