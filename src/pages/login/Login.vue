@@ -5,19 +5,17 @@
         <img alt="logo" class="logo" src="@/assets/img/logo.png" />
         <span class="title">{{systemName}}</span>
       </div>
-      <div class="desc">Ant Design 是西湖区最具影响力的 Web 设计规范</div>
     </div>
     <div class="login">
       <a-form @submit="onSubmit" :form="form">
         <a-tabs size="large" :tabBarStyle="{textAlign: 'center'}" style="padding: 0 2px;">
           <a-tab-pane tab="账户密码登录" key="1">
-            <a-alert type="error" :closable="true" v-show="error" :message="error" showIcon style="margin-bottom: 24px;" />
             <a-form-item>
               <a-input
                 autocomplete="autocomplete"
                 size="large"
                 placeholder="admin"
-                v-decorator="['name', {rules: [{ required: true, message: '请输入账户名', whitespace: true}]}]"
+                v-decorator="['userAccount', {rules: [{ required: true, message: '请输入账户名', whitespace: true}]}]"
               >
                 <a-icon slot="prefix" type="user" />
               </a-input>
@@ -28,7 +26,7 @@
                 placeholder="888888"
                 autocomplete="autocomplete"
                 type="password"
-                v-decorator="['password', {rules: [{ required: true, message: '请输入密码', whitespace: true}]}]"
+                v-decorator="['userPassword', {rules: [{ required: true, message: '请输入密码', whitespace: true}]}]"
               >
                 <a-icon slot="prefix" type="lock" />
               </a-input>
@@ -74,10 +72,12 @@
 </template>
 
 <script>
+import { message } from 'ant-design-vue'
 import CommonLayout from '@/layouts/CommonLayout'
-import {login, getRoutesConfig} from '@/services/user'
-import {setAuthorization} from '@/utils/request'
-import {loadRoutes} from '@/utils/routerUtil'
+import {login} from '@/services/user'
+// import {setAuthorization} from '@/utils/request'
+import { SET_AUTH } from '@/utils/auth'
+// import {loadRoutes} from '@/utils/routerUtil'
 import {mapMutations} from 'vuex'
 
 export default {
@@ -99,34 +99,42 @@ export default {
     ...mapMutations('account', ['setUser', 'setPermissions', 'setRoles']),
     onSubmit (e) {
       e.preventDefault()
-      this.form.validateFields((err) => {
+      this.form.validateFields(async (err) => {
         if (!err) {
           this.logging = true
-          const name = this.form.getFieldValue('name')
-          const password = this.form.getFieldValue('password')
-          login(name, password).then(this.afterLogin)
+
+          try {
+            const userAccount = this.form.getFieldValue('userAccount')
+            const userPassword = this.form.getFieldValue('userPassword')
+            let result = await login(userAccount, userPassword)
+
+            if (result.code === 200) {
+              this.afterLogin(result.data)
+            } else {
+              message.error(result.msg)
+            }
+          } catch (err){
+            console.log('++', err.message)
+          }
+          this.logging = false
         }
       })
     },
-    afterLogin(res) {
-      this.logging = false
-      const loginRes = res.data
-      if (loginRes.code >= 0) {
-        const {user, permissions, roles} = loginRes.data
-        this.setUser(user)
-        this.setPermissions(permissions)
-        this.setRoles(roles)
-        setAuthorization({token: loginRes.data.token, expireAt: new Date(loginRes.data.expireAt)})
-        // 获取路由配置
-        getRoutesConfig().then(result => {
-          const routesConfig = result.data.data
-          loadRoutes(routesConfig)
-          this.$router.push('/dashboard/workplace')
-          this.$message.success(loginRes.message, 3)
-        })
-      } else {
-        this.error = loginRes.message
-      }
+    afterLogin(data) {
+
+      const {permissions, roles} = data
+      this.setUser(data)
+      SET_AUTH(data.token)
+      this.setPermissions(permissions)
+      this.setRoles(roles)
+      this.$router.replace('/dashboard/workplace')
+      // setAuthorization({token: data.token, expireAt: new Date(data.expireAt)})
+      // 获取路由配置
+      // getRoutesConfig().then(result => {
+      //   const routesConfig = result.data.data
+      //   loadRoutes(routesConfig)
+      //   this.$router.replace('/dashboard/workplace')
+      // })
     }
   }
 }

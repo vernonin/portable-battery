@@ -144,7 +144,6 @@
   }
   .tabs-container{
     margin-top: 2px;
-    margin-left: -10px;
     transition: top,left 0.2s;
     .header-lock{
       font-size: 18px;
