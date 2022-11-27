@@ -8,12 +8,16 @@
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
-      :data-source="data"
+      :data-source="users"
     >
+      <div slot="userSex" slot-scope="userSex">
+        {{userSex ? '男' : '女'}}
+      </div>
+      
       <div slot="status" slot-scope="status">
-        <a-badge status="success" v-if="status === '生效'"/>
+        <a-badge status="success" v-if="status"/>
         <a-badge status="default" v-else />
-        {{status}}
+        {{status ? '生效' : '失效'}}
       </div>
 
       <div slot="action">
@@ -35,6 +39,7 @@
   import PlusUser from './components/PlusUser.vue';
   import EditUser from './components/EditUser.vue';
   import ImportUser from './components/ImportUser.vue';
+  import { GetUsers } from '@/services/user'
 
   // 二维数组：第一层代表列，第二层代表每列的Form.Item
   const searchFormData = [
@@ -105,40 +110,16 @@
   ]
 
   const columns = [
-    { title: '用户名', dataIndex: 'userName', key: 'userName' },
-    { title: '姓名', dataIndex: 'name', key: 'name' },
-    { title: '性别', dataIndex: 'gender', key: 'gender', width: 120 },
+    { title: '用户名', dataIndex: 'userAccount', key: 'userAccount' },
+    { title: '姓名', dataIndex: 'userName', key: 'userName' },
+    { title: '性别', dataIndex: 'userSex', key: 'userSex', width: 80, align: 'center', scopedSlots: { customRender: 'userSex' } },
     { title: '手机号码', dataIndex: 'userPhone', key: 'userPhone' },
-    { title: '状态', dataIndex: 'status', key: 'status', width: 120, scopedSlots: { customRender: 'status' } },
+    { title: '邮箱', dataIndex: 'userEmail', key: 'userEmail' },
+    { title: '绑定角色', dataIndex: 'roleNames', key: 'roleNames', width: 120 },
+    { title: '状态', dataIndex: 'status', key: 'status', width: 100, align: 'center', scopedSlots: { customRender: 'status' } },
     { title: '操作', dataIndex: '', key: 'active', width: 120, align: 'center', scopedSlots: { customRender: 'action' } },
   ];
 
-  const data = [
-    {
-      key: '1',
-      userName: 'John Brown',
-      userPhone: '13318480733',
-      name: '孙忆枫',
-      gender: '男',
-      status: '生效',
-    },
-    {
-      key: '2',
-      userName: 'user002',
-      userPhone: '13318480733',
-      name: '纪广',
-      gender: '男',
-      status: '生效'
-    },
-    {
-      key: '13',
-      userName: 'user003',
-      userPhone: '13318480733',
-      name: '王笑天',
-      gender: '女',
-      status: '失效'
-    },
-  ]
 
   export default {
     name: 'User',
@@ -146,7 +127,7 @@
     components: { SearchForm, SelectAlert, ButtonBar, PlusUser, EditUser, ImportUser },
     data() {
       return {
-        data,
+        users: [],
         columns,
         barbtns,
         searchFormData,
@@ -157,9 +138,24 @@
         selectedRowKeys: [],
       }
     },
+    created() {
+      this.getPageUser()
+    },
     methods: {
       onSelectChange(selectedRowKeys) {
         this.selectedRowKeys = selectedRowKeys;
+      },
+      async getPageUser() {
+        try {
+          let result = await GetUsers()
+          
+          if (result.code === 200) {
+            this.users = result.data.records.map(u => ({...u, key: u.id}))
+          }
+        }
+        catch {
+          this.users = []
+        }
       },
       clearSelected() {
         this.selectedRowKeys = [];

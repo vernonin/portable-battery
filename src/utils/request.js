@@ -81,20 +81,9 @@ function removeAuthorization(authType = AUTH_TYPE.BEARER) {
  * @param authType
  * @returns {boolean}
  */
-function checkAuthorization(authType = AUTH_TYPE.BEARER) {
-  switch (authType) {
-    case AUTH_TYPE.BEARER:
-      if (Cookie.get(xsrfHeaderName)) {
-        return true
-      }
-      break
-    case AUTH_TYPE.BASIC:
-    case AUTH_TYPE.AUTH1:
-    case AUTH_TYPE.AUTH2:
-    default:
-      break
-  }
-  return false
+function checkAuthorization() {
+  
+  return 
 }
 
 /**
