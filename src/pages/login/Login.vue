@@ -72,7 +72,6 @@
 </template>
 
 <script>
-import { message } from 'ant-design-vue'
 import CommonLayout from '@/layouts/CommonLayout'
 import {login} from '@/services/user'
 // import {setAuthorization} from '@/utils/request'
@@ -110,11 +109,13 @@ export default {
 
             if (result.code === 200) {
               this.afterLogin(result.data)
+              this.$message.success('登录成功！');
             } else {
-              message.error(result.msg)
+              this.$message.error(result.msg);
             }
           } catch (err){
             console.log('++', err.message)
+            this.$message.error(err.message);
           }
           this.logging = false
         }

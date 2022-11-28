@@ -8,12 +8,12 @@
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
-      :data-source="data"
+      :data-source="roles"
     >
       <div slot="status" slot-scope="status">
-        <a-badge status="success" v-if="status === '生效'"/>
+        <a-badge status="success" v-if="status"/>
         <a-badge status="default" v-else />
-        {{status}}
+        {{status ? '生效' : '失效'}}
       </div>
 
       <div slot="action">
@@ -35,6 +35,7 @@
   import ButtonBar from '@/components/tool/ButtonBar.vue';
   import EditRole from './components/EditRole.vue';
   import PermissRole from './components/PermissRole.vue';
+  import { GetRoles } from '@/services/role'
 
   // 二维数组：第一层代表列，第二层代表每列的Form.Item
   const searchFormData = [
@@ -82,36 +83,12 @@
   ]
 
   const columns = [
-    { title: '角色编号', dataIndex: 'roleNumber', key: 'roleNumber', width: 150  },
+    { title: '角色编号', dataIndex: 'roleCode', key: 'roleCode', width: 150  },
     { title: '角色名称', dataIndex: 'roleName', key: 'roleName', width: 150 },
     { title: '角色描述', dataIndex: 'roleDescribe', key: 'roleDescribe' },
     { title: '状态', dataIndex: 'status', key: 'status', width: 120, scopedSlots: { customRender: 'status' } },
     { title: '操作', dataIndex: '', key: 'active', width: 180, align: 'center', scopedSlots: { customRender: 'action' } },
   ];
-
-  const data = [
-    {
-      key: '1',
-      roleNumber: 1001,
-      roleName: '店长',
-      roleDescribe: '最佳产品管理书籍在此，获取职场上升秘籍',
-      status: '生效',
-    },
-    {
-      key: '2',
-      roleNumber: 1002,
-      roleName: '店员',
-      roleDescribe: '探索了5种改善移动用户体验的绝佳做法，进来学！',
-      status: '失效',
-    },
-    {
-      key: '3',
-      roleNumber: 1003,
-      roleName: '收银员',
-      roleDescribe: '面试攻略：超级加分的10个面试满分小技巧',
-      status: '生效',
-    },
-  ]
 
   export default {
     name: 'Role',
@@ -119,20 +96,36 @@
     components: { SearchForm, SelectAlert, ButtonBar, EditRole, PermissRole },
     data() {
       return {
-        data,
         columns,
         barbtns,
         searchFormData,
         
+        roles: [],
         TYPE: 'PLUS',
         openEditRole: false,
         openPermissRole: false,
         selectedRowKeys: [],
       }
     },
+    created() {
+      this.getPageRole()
+    },
     methods: {
       onSelectChange(selectedRowKeys) {
         this.selectedRowKeys = selectedRowKeys;
+      },
+      async getPageRole() {
+        try {
+          let result = await GetRoles()
+
+          if (result.code === 200) {
+            console.log(result)
+            this.roles = result.data.records
+          }
+        }
+        catch {
+          this.roles = []
+        }
       },
       clearSelected() {
         this.selectedRowKeys = [];

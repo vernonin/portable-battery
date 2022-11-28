@@ -1,6 +1,6 @@
 <template>
   <div style="background-color: #fff;padding: 12px;">
-    <SearchForm :form-data="searchFormData" />
+    <SearchForm :form-data="searchFormData" :on-search="getPageUser" />
     <!-- 按钮 -->
     <ButtonBar :btns="barbtns" @plus="onPlus" @batch="onBatch" @import="onImport" @export="onExport" />
     <SelectAlert :num="selectedRowKeys.length" @clear="clearSelected" />
@@ -9,6 +9,7 @@
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :data-source="users"
+      :loading="tableLoading"
     >
       <div slot="userSex" slot-scope="userSex">
         {{userSex ? '男' : '女'}}
@@ -20,14 +21,14 @@
         {{status ? '生效' : '失效'}}
       </div>
 
-      <div slot="action">
-        <a @click="onEdit">{{$t('edit')}}</a>
+      <div slot="action" slot-scope="user">
+        <a @click="onEdit(user)">{{$t('edit')}}</a>
         <a-divider type="vertical" />
-        <a>{{$t('invalid')}}</a>
+        <a @click="changeStatus(user)">{{user.status ? $t('invalid') : $t('valid')}}</a>
       </div>
     </a-table>
-    <PlusUser :visible="openPlusUser" @cancel="openPlusUser = false" />
-    <EditUser :visible="openEditUser" @cancel="openEditUser = false" />
+    <PlusUser :visible="openPlusUser" :created="getPageUser" @cancel="openPlusUser = false" />
+    <EditUser :visible="openEditUser" :user-id="currentUserId" :created="getPageUser" @cancel="openEditUser = false" />
     <ImportUser :visible="openImportUser" @cancel="openImportUser = false" />
   </div>
 </template>
@@ -39,21 +40,21 @@
   import PlusUser from './components/PlusUser.vue';
   import EditUser from './components/EditUser.vue';
   import ImportUser from './components/ImportUser.vue';
-  import { GetUsers } from '@/services/user'
+  import { GetUsers, UpdateStatus } from '@/services/user';
 
   // 二维数组：第一层代表列，第二层代表每列的Form.Item
   const searchFormData = [
     [
       {
-        label: 'username',
+        label: 'userAccount',
         type: 'input',
-        name: 'username',
+        name: 'userAccount',
         placeholder: '请输入用户名'
       },
       {
-        label: 'name',
+        label: 'userName',
         type: 'input',
-        name: 'name',
+        name: 'userName',
         placeholder: '请输入姓名'
       }
     ],
@@ -64,18 +65,18 @@
         name: 'status',
         placeholder: '请选择状态',
         options: [
-          { label: '生效', value: 'shengxiao' },
-          { label: '失效', value: 'shixiao' }
+          { label: '生效', value: 'valid' },
+          { label: '失效', value: 'invalid' }
         ]
       },
       {
         label: 'gender',
         type: 'select',
-        name: 'gender',
+        name: 'userSex',
         placeholder: '请选择性别',
         options: [
-          { label: '男', value: 'nan' },
-          { label: '女', value: 'nv' }
+          { label: '男', value: 'male' },
+          { label: '女', value: 'female' }
         ]
       }
     ]
@@ -131,7 +132,9 @@
         columns,
         barbtns,
         searchFormData,
-
+        
+        currentUserId: '',
+        tableLoading: false,
         openPlusUser: false,
         openEditUser: false,
         openImportUser: false,
@@ -145,9 +148,10 @@
       onSelectChange(selectedRowKeys) {
         this.selectedRowKeys = selectedRowKeys;
       },
-      async getPageUser() {
+      async getPageUser(query = {}) {
+        this.tableLoading = true
         try {
-          let result = await GetUsers()
+          let result = await GetUsers(query)
           
           if (result.code === 200) {
             this.users = result.data.records.map(u => ({...u, key: u.id}))
@@ -156,6 +160,7 @@
         catch {
           this.users = []
         }
+        this.tableLoading = false
       },
       clearSelected() {
         this.selectedRowKeys = [];
@@ -164,8 +169,17 @@
         console.log('onPlus');
         this.openPlusUser = true;
       },
-      onEdit() {
+      onEdit({ id }) {
+        this.currentUserId = id
         this.openEditUser = true;
+      },
+      async changeStatus({ id }) {
+        const result = await UpdateStatus(id)
+
+        if (result.code === 200) {
+          console.log(result)
+          this.getPageUser()
+        }
       },
       onBatch() {
         console.log('onBatch');

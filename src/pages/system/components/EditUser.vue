@@ -7,104 +7,144 @@
     @cancel="handleCancel"
   >
     <template slot="footer">
-      <a-button key="back" @click="handleCancel">
+      <a-button @click="handleCancel">
         {{$t('cancel')}}
       </a-button>
-      <a-button key="back" icon="setting" @click="handleResetPsw">
+      <a-button icon="setting" @click="handleResetPsw">
         {{$t('resetPsw')}}
       </a-button>
       <a-button key="submit" type="primary" @click="handleOk">
         {{$t('confirm')}}
       </a-button>
     </template>
-    <a-form :form="form" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }" @submit="handleSubmit">
+    <a-form :form="form" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
       <a-row>
         <a-col :span="12">
-          <a-form-item :label="$t('username')">
+          <a-form-item :label="$t('userAccount')">
             <a-input
-              v-decorator="['userName', { rules: [{ required: true, message: $t('usernamepl') }] }]"
-              :placeholder="$t('usernamepl')"
+              v-decorator="['userAccount', { rules: [{ required: true, message: $t('userAccountpl') }] }]"
+              :placeholder="$t('userAccountpl')"
             />
           </a-form-item>
           <a-form-item :label="$t('gender')">
             <a-select
               v-decorator="[
-                'gender',
+                'userSex',
                 { rules: [{ required: true, message: $t('genderpl') }] },
               ]"
               :placeholder="$t('genderpl')"
-              @change="handleSelectChange"
             >
               <a-select-option value="male">{{$t('male')}}</a-select-option>
               <a-select-option value="female">{{$t('female')}}</a-select-option>
             </a-select>
           </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item :label="$t('name')">
+          <a-form-item :label="$t('userPhone')">
             <a-input
-              v-decorator="['name', { rules: [{ required: true, message: $t('namepl') }] }]"
-              :placeholder="$t('namepl')"
+              v-decorator="['userPhone', { rules: [{ required: true, message: $t('userPhonepl') }] }]"
+              :placeholder="$t('userPhonepl')"
             />
           </a-form-item>
-          <a-form-item :label="$t('status')">
-            <a-select
-              v-decorator="[
-                'status',
-                { rules: [{ required: true, message: $t('statuspl') }] },
-              ]"
-              :placeholder="$t('statuspl')"
-              @change="handleSelectChange"
-            >
-              <a-select-option value="valid">{{$t('valid')}}</a-select-option>
-              <a-select-option value="invalid">{{$t('invalid')}}</a-select-option>
-            </a-select>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item :label="$t('userName')">
+            <a-input
+              v-decorator="['userName', { rules: [{ required: true, message: $t('userNamepl') }] }]"
+              :placeholder="$t('userNamepl')"
+            />
+          </a-form-item>
+          <a-form-item :label="$t('userEmail')">
+            <a-input
+              v-decorator="['userEmail', { rules: [{ required: true, message: $t('userEmailpl') }] }]"
+              :placeholder="$t('userEmailpl')"
+            />
           </a-form-item>
         </a-col>
       </a-row>
     </a-form>
+
+    <MessageBox
+      :visible="openResetPwd"
+      title="重置密码"
+      confirmText="确定重置"
+      content="即将为用户重置密码为初始化状态"
+      @close="openResetPwd = false"
+      @confirm="confirmReset"
+    />
   </a-modal>
 </template>
 
 <script>
+  import MessageBox from '@/components/message-box/MessageBox'
+  import { GetUserInfo, UpdateUser, ResetPassword } from '@/services/user'
+
   export default {
     name: 'PlusUser',
     i18n: require('../i18n'),
+    components: { MessageBox },
     props: {
-      visible: { type: Boolean, default: false }
+      visible: { type: Boolean, default: false },
+      userId: { type: String, default: '' },
+      created: { type: Function }
     },
     data() {
       return {
+        openResetPwd: false,
         form: this.$form.createForm(this, { name: 'coordinated' }),
+      }
+    },
+    watch: {
+      visible(newVal) {
+        if (newVal) {
+          this.getUserInfo()
+        }
       }
     },
     methods: {
       handleOk() {
         this.form.validateFields((err, values) => {
           if (!err) {
-            console.info('success:', values);
+            let { userSex } = values
+
+            userSex = userSex === 'male' ? true : userSex === 'female' ? false : null
+
+            UpdateUser({...values, userSex, id: this.userId}).then(result => {
+
+              if (result.code === 200) {
+                this.$emit('cancel')
+                this.created()
+                this.$message.success('修改用户信息成功！')
+              }
+            }).catch(() => {
+              this.$message.error('修改用户信息失败！')
+            })
           }
         });
+      },
+      async getUserInfo() {
+        let res = await GetUserInfo(this.userId)
+        
+        if(res.code === 200) {
+          let { userSex } = res.data
+
+          this.form.setFieldsValue({...res.data, userSex: userSex ? 'male' : 'female'});
+        }
       },
       handleCancel() {
         this.$emit('cancel')
       },
       handleResetPsw() {
-        
+        this.openResetPwd = true
       },
-      handleSubmit(e) {
-        e.preventDefault();
-        this.form.validateFields((err, values) => {
-          if (!err) {
-            console.log('Received values of form: ', values);
-          }
-        });
-      },
-      handleSelectChange(value) {
-        this.form.setFieldsValue({
-          note: `Hi, ${value === 'male' ? 'man' : 'lady'}!`,
-        });
-      },
+      async confirmReset() {
+        const result = await ResetPassword(this.userId)
+
+        if (result.code === 200) {
+          this.openResetPwd = false
+          this.$message.success('重置密码成功！')
+        } else {
+          this.$message.error('重置密码失败！')
+        }
+      }
     }
   }
 </script>

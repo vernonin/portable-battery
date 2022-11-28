@@ -10,7 +10,6 @@
               v-if="item.type === 'select'"
               v-decorator="[item.name]"
               :placeholder="item.placeholder"
-              @change="handleSelectChange"
             >
               <a-select-option :key="s.value" v-for="s in item.options" :value="s.value">{{s.label}}</a-select-option>
             </a-select>
@@ -40,6 +39,9 @@
       formData: {
         type: Array,
         default: () => []
+      },
+      onSearch: {
+        type: Function
       }
     },
     data() {
@@ -57,14 +59,13 @@
         e.preventDefault();
         this.form.validateFields((err, values) => {
           if (!err) {
-            console.log('Received values of form: ', values);
+            let { status, userSex } = values
+            
+            status = status === 'valid' ? true : status === 'invalid' ? false : null
+            userSex = userSex === 'male' ? true : userSex === 'female' ? false : null
+
+            this.onSearch({...values, status, userSex })
           }
-        });
-      },
-      handleSelectChange(value) {
-        console.log(value);
-        this.form.setFieldsValue({
-          note: `Hi, ${value === 'male' ? 'man' : 'lady'}!`,
         });
       },
     },
