@@ -34,7 +34,7 @@
 <script>
   export default {
     name: 'SearchForm',
-    i18n: require('../i18n'),
+    i18n: require('@/pages/system/i18n'),
     props: {
       formData: {
         type: Array,

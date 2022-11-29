@@ -12,7 +12,7 @@
 <script>
 export default {
   name: 'SelectAlert',
-  i18n: require('../i18n'),
+  i18n: require('@/pages/system/i18n'),
   props: {
     num: {
       type: Number,

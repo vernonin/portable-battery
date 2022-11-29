@@ -30,12 +30,12 @@
 </template>
 
 <script>
-  import SearchForm from './components/SearchForm.vue';
-  import SelectAlert from './components/SelectAlert.vue';
+  import SearchForm from '@/components/tool/SearchForm.vue';
+  import SelectAlert from '@/components/tool/SelectAlert.vue';
   import ButtonBar from '@/components/tool/ButtonBar.vue';
   import EditRole from './components/EditRole.vue';
   import PermissRole from './components/PermissRole.vue';
-  import { GetRoles } from '@/services/role'
+  import { GetRoles } from '@/services/role';
 
   // 二维数组：第一层代表列，第二层代表每列的Form.Item
   const searchFormData = [
