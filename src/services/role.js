@@ -12,6 +12,15 @@ export function GetRoles(params = {}) {
 }
 
 /**
+ * 根据ID查询角色
+ * @param {*} id 角色ID
+ * @returns 
+ */
+export function GetRoleInfo(id) {
+  return http.get(`${S_R_URL}/detail`, {params: { id }})
+}
+
+/**
  * 新建角色
  * @param {*} roleCode 角色编号
  * @param {*} roleCode 角色名称

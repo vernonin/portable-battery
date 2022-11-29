@@ -36,13 +36,8 @@
     name: 'SearchForm',
     i18n: require('@/pages/system/i18n'),
     props: {
-      formData: {
-        type: Array,
-        default: () => []
-      },
-      onSearch: {
-        type: Function
-      }
+      formData: { type: Array, default: () => [] },
+      onSearch: { type: Function }
     },
     data() {
       return {

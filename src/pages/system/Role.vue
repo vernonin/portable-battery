@@ -1,6 +1,6 @@
 <template>
   <div style="background-color: #fff;padding: 12px;">
-    <SearchForm :form-data="searchFormData" />
+    <SearchForm :form-data="searchFormData" :on-search="getPageRole" />
     <!-- 按钮 -->
     <ButtonBar :btns="barbtns" @plus="onPlus" @batch="onBatch" />
     <SelectAlert :num="selectedRowKeys.length" @clear="clearSelected" />
@@ -9,6 +9,7 @@
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :data-source="roles"
+      :loading="tableLoading"
     >
       <div slot="status" slot-scope="status">
         <a-badge status="success" v-if="status"/>
@@ -16,15 +17,15 @@
         {{status ? '生效' : '失效'}}
       </div>
 
-      <div slot="action">
-        <a @click="onEdit">{{$t('edit')}}</a>
+      <div slot="action" slot-scope="role">
+        <a @click="onEdit(role)">{{$t('edit')}}</a>
         <a-divider type="vertical" />
         <a @click="onPermiss">{{$t('permiss')}}</a>
         <a-divider type="vertical" />
-        <a>{{$t('invalid')}}</a>
+        <a @click="changeStatus(role)">{{role.status ? $t('invalid') : $t('valid')}}</a>
       </div>
     </a-table>
-    <EditRole :visible="openEditRole" :type="TYPE" @cancel="openEditRole = false" />
+    <EditRole :visible="openEditRole" :type="TYPE" :role-id="currentRoleId" :succeed="getPageRole" @cancel="openEditRole = false" />
     <PermissRole :visible="openPermissRole" @cancel="openPermissRole = false" />
   </div>
 </template>
@@ -35,15 +36,17 @@
   import ButtonBar from '@/components/tool/ButtonBar.vue';
   import EditRole from './components/EditRole.vue';
   import PermissRole from './components/PermissRole.vue';
-  import { GetRoles } from '@/services/role';
+  import { GetRoles, UpdateRoleStatus } from '@/services/role';
+
+  const updateStatusKey = 'updateStatus';
 
   // 二维数组：第一层代表列，第二层代表每列的Form.Item
   const searchFormData = [
     [
       {
-        label: 'roleNumber',
+        label: 'roleCode',
         type: 'input',
-        name: 'roleNumber',
+        name: 'roleCode',
         placeholder: '请输入角色编号'
       },
       {
@@ -83,9 +86,8 @@
   ]
 
   const columns = [
-    { title: '角色编号', dataIndex: 'roleCode', key: 'roleCode', width: 150  },
-    { title: '角色名称', dataIndex: 'roleName', key: 'roleName', width: 150 },
-    { title: '角色描述', dataIndex: 'roleDescribe', key: 'roleDescribe' },
+    { title: '角色编号', dataIndex: 'roleCode', key: 'roleCode'  },
+    { title: '角色名称', dataIndex: 'roleName', key: 'roleName' },
     { title: '状态', dataIndex: 'status', key: 'status', width: 120, scopedSlots: { customRender: 'status' } },
     { title: '操作', dataIndex: '', key: 'active', width: 180, align: 'center', scopedSlots: { customRender: 'action' } },
   ];
@@ -102,9 +104,11 @@
         
         roles: [],
         TYPE: 'PLUS',
+        currentRoleId: '',
+        selectedRowKeys: [],
+        tableLoading: false,
         openEditRole: false,
         openPermissRole: false,
-        selectedRowKeys: [],
       }
     },
     created() {
@@ -114,17 +118,35 @@
       onSelectChange(selectedRowKeys) {
         this.selectedRowKeys = selectedRowKeys;
       },
-      async getPageRole() {
+      async getPageRole(query = {}) {
+        this.tableLoading = true
         try {
-          let result = await GetRoles()
+          let result = await GetRoles(query)
 
           if (result.code === 200) {
-            console.log(result)
-            this.roles = result.data.records
+            this.roles = result.data.records.map(r => ({...r, key: r.id}))
           }
         }
         catch {
           this.roles = []
+        }
+        this.tableLoading = false
+      },
+      async changeStatus({ id }) {
+        this.$message.loading({ content: this.$t('updatingStatus'), updateStatusKey });
+
+        try {
+          let result = await UpdateRoleStatus(id)
+
+          if (result.code === 200) {
+            this.getPageRole()
+            this.$message.success({ content: this.$t('afterStatusUpdate'), updateStatusKey });
+          } else {
+            this.$message.error(result.msg)
+          }
+        }
+        catch(error) {
+          this.$message.success({ content: error.$message, updateStatusKey });
         }
       },
       clearSelected() {
@@ -135,9 +157,10 @@
         this.TYPE = 'PLUS'
         this.openEditRole = true;
       },
-      onEdit() {
+      onEdit({ id }) {
         this.TYPE = 'EDIT'
-        this.openEditRole = true;
+        this.currentRoleId = id
+        this.openEditRole = true
       },
       onBatch() {
         console.log('onBatch');

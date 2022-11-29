@@ -35,8 +35,8 @@ module.exports = {
       importUserTitle: '导入用户信息',
       importPromptText: '点击或将文件拖拽到这里上传',
       supportFiles: '支持扩展名：',
-      roleNumber: '角色编号',
-      roleNumberpl: '请输入角色编号',
+      roleCode: '角色编号',
+      roleCodepl: '请输入角色编号',
       roleName: '角色名称',
       roleNamepl: '请输入角色名称',
       roleDescribe: '角色描述',
@@ -56,6 +56,8 @@ module.exports = {
       menuSortpl: '请输入菜单排序',
       parentMenu: '上级菜单',
       parentMenupl: '请选择上级菜单',
+      updatingStatus: '更新状态中...',
+      afterStatusUpdate: '更新状态成功！'
     },
     HK: {
       userAccount: '用戶名',
@@ -92,8 +94,8 @@ module.exports = {
       importUserTitle: '導入用戶資訊',
       importPromptText: '點擊或將檔案拖拽到這裡上傳',
       supportFiles: '支持副檔名：',
-      roleNumber: '角色編號',
-      roleNumberpl: '請輸入角色編號',
+      roleCode: '角色編號',
+      roleCodepl: '請輸入角色編號',
       roleName: '角色名稱',
       roleNamepl: '請輸入角色名稱',
       roleDescribe: '角色描述',
@@ -113,6 +115,8 @@ module.exports = {
       menuSortpl: '請輸入選單排序',
       parentMenu: '上級選單',
       parentMenupl: '請選擇上級選單',
+      updatingStatus: '更新狀態中...',
+      afterStatusUpdate: '更新狀態成功！',
     },
     US: {
       userAccount: 'Account',
@@ -149,8 +153,8 @@ module.exports = {
       importUserTitle: 'Import user information',
       importPromptText: 'Click or drag file to this area to upload',
       supportFiles: 'Supported extensions:',
-      roleNumber: 'Role number',
-      roleNumberpl: 'Please enter role number',
+      roleCode: 'Role code',
+      roleCodepl: 'Please enter role number',
       roleName: 'Role name',
       roleNamepl: 'Please enter role name',
       roleDescribe: 'Role describe',
@@ -170,6 +174,8 @@ module.exports = {
       menuSortpl: 'Please enter menu sort',
       parentMenu: 'Parent menu',
       parentMenupl: 'Please select parent menu',
+      updatingStatus: 'Updating status...',
+      afterStatusUpdate: 'Update status succeeded!'
     },
   }
 }

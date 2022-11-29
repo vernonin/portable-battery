@@ -22,7 +22,7 @@
       </div>
 
       <div slot="action" slot-scope="user">
-        <a @click="onEdit(user)">{{$t('edit')}}</a>
+        <a @click="onEdit(user)" :style="user.status ? {} : {color: '#999', cursor: 'not-allowed'}">{{$t('edit')}}</a>
         <a-divider type="vertical" />
         <a @click="changeStatus(user)">{{user.status ? $t('invalid') : $t('valid')}}</a>
       </div>
@@ -41,6 +41,8 @@
   import EditUser from './components/EditUser.vue';
   import ImportUser from './components/ImportUser.vue';
   import { GetUsers, UpdateUserStatus } from '@/services/user';
+
+  const updateStatusKey = 'updateStatus';
 
   // 二维数组：第一层代表列，第二层代表每列的Form.Item
   const searchFormData = [
@@ -169,17 +171,27 @@
         console.log('onPlus');
         this.openPlusUser = true;
       },
-      onEdit({ id }) {
-        this.currentUserId = id
-        this.openEditUser = true;
+      onEdit({ id, status }) {
+        if (status) {
+          this.currentUserId = id
+          this.openEditUser = true
+        }
       },
       async changeStatus({ id }) {
-        const result = await UpdateUserStatus(id)
+        this.$message.loading({ content: this.$t('updatingStatus'), updateStatusKey });
 
-        if (result.code === 200) {
-          console.log(result)
-          this.getPageUser()
+        try {
+          const result = await UpdateUserStatus(id)
+
+          if (result.code === 200) {
+            this.getPageUser()
+            this.$message.success({ content: this.$t('afterStatusUpdate'), updateStatusKey });
+          }
         }
+        catch (error) {
+          this.$message.success({ content: error.$message, updateStatusKey });
+        }
+        
       },
       onBatch() {
         console.log('onBatch');

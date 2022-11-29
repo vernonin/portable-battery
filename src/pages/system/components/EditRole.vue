@@ -9,19 +9,11 @@
     <a-form :form="form" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
       <a-row>
         <a-col :span="12">
-          <a-form-item :label="$t('roleNumber')">
+          <a-form-item :label="$t('roleCode')">
             <a-input
-              v-decorator="['roleNumber', { rules: [{ required: true, message: $t('roleNumberpl') }] }]"
-              :placeholder="$t('roleNumberpl')"
+              v-decorator="['roleCode', { rules: [{ required: true, message: $t('roleCodepl') }] }]"
+              :placeholder="$t('roleCodepl')"
             />
-          </a-form-item>
-          <a-form-item :label="$t('roleDescribe')">
-            <a-textarea
-              v-decorator="['roleDescribe']"
-              :placeholder="$t('multilineInput')"
-              :rows="4"
-            />
-
           </a-form-item>
         </a-col>
         <a-col :span="12">
@@ -38,32 +30,81 @@
 </template>
 
 <script>
+  import { CreateRole, UpdateRole, GetRoleInfo } from '@/services/role'
   export default {
     name: 'PlusUser',
     i18n: require('../i18n'),
     props: {
       visible: { type: Boolean, default: false },
-      type: { type: String, default: 'PLUS'}
+      type: { type: String, default: 'PLUS'},
+      roleId: { type: String, default: ''},
+      succeed: { type: Function }
     },
     data() {
       return {
         form: this.$form.createForm(this, { name: 'coordinated' }),
       }
     },
+    watch: {
+      visible(newVal) {
+        if (newVal && this.type === 'EDIT') {
+          this.getRoleInfo()
+        }
+      }
+    },
     methods: {
       handleOk() {
         this.form.validateFields((err, values) => {
           if (!err) {
-            console.info('success:', values);
+            console.info('success:',this.type, values);
+
+            switch(this.type) {
+              case 'PLUS':
+                this.plusRole(values)
+                break;
+              case 'EDIT':
+                this.EditRole(values)
+                break;
+            }
+
           }
         });
+      },
+      async plusRole(data) {
+        const result = await CreateRole(data)
+
+        if (result.code === 200) {
+          this.$emit('cancel')
+          this.succeed()
+          this.$message.success('新建角色成功！')
+        } else {
+          this.$message.error('新建角色失败！')
+        }
+      },
+      async EditRole(data) {
+        const result = await UpdateRole({...data, id: this.roleId})
+
+        if (result.code === 200) {
+          this.$emit('cancel')
+          this.succeed()
+          this.$message.success('修改角色成功！')
+        } else {
+          this.$message.error('修改角色失败！')
+        }
       },
       handleCancel() {
         this.$emit('cancel')
       },
+      async getRoleInfo() {
+        let result = await GetRoleInfo(this.roleId)
+
+        if (result.code === 200) {
+          const { roleCode, roleName } = result.data
+          this.form.setFieldsValue({ roleCode, roleName })
+        } else {
+          this.$message.error(result.msg)
+        }
+      },
     }
   }
 </script>
-
-<style scoped>
-</style>
