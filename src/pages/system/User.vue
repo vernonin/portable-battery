@@ -40,7 +40,7 @@
   import PlusUser from './components/PlusUser.vue';
   import EditUser from './components/EditUser.vue';
   import ImportUser from './components/ImportUser.vue';
-  import { GetUsers, UpdateStatus } from '@/services/user';
+  import { GetUsers, UpdateUserStatus } from '@/services/user';
 
   // 二维数组：第一层代表列，第二层代表每列的Form.Item
   const searchFormData = [
@@ -174,7 +174,7 @@
         this.openEditUser = true;
       },
       async changeStatus({ id }) {
-        const result = await UpdateStatus(id)
+        const result = await UpdateUserStatus(id)
 
         if (result.code === 200) {
           console.log(result)

@@ -91,6 +91,6 @@ export function ResetPassword(userId) {
  * @param {*} userId 用户ID
  * @returns 
  */
-export function UpdateStatus(userId) {
+export function UpdateUserStatus(userId) {
   return http.post(`${S_U_URL}/updateUserStatus`, {}, {params: { userId }})
 }
