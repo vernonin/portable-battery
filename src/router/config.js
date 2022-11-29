@@ -165,6 +165,26 @@ const options = {
           ]
         },
         {
+          path: 'workbench',
+          name: '工作台',
+          meta: {
+            icon: 'appstore'
+          },
+          component: PageView,
+          children: [
+            {
+              path: 'business',
+              name: '商机管理',
+              component: () => import('@/pages/workbench/Business')
+            },
+            {
+              path: 'cabinet',
+              name: '机柜管理',
+              component: () => import('@/pages/workbench/Cabinet')
+            }
+          ]
+        },
+        {
           path: 'system',
           name: '系统管理',
           meta: {
