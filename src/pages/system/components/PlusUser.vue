@@ -75,23 +75,18 @@
     },
     methods: {
       handleOk() {
-        this.form.validateFields((err, values) => {
+        this.form.validateFields(async (err, values) => {
           if (!err) {
             let { userSex, userPassword } = values
 
             userSex = userSex === 'male' ? true : userSex === 'female' ? false : null
             userPassword = userPassword ? userPassword : '123456'
 
-            CreateUser({...values, userSex, userPassword}).then((result) => {
-              if(result.code === 200) {
-                this.$message.success(this.$t('afterCreateUser'));
+            await CreateUser({...values, userSex, userPassword})
 
-                this.$emit('cancel');
-                this.created();
-              }
-            }).catch((err) => {
-              this.$message.error(err);
-            });
+            this.$message.success(this.$t('afterCreateUser'));
+            this.$emit('cancel');
+            this.created();
           }
         });
       },

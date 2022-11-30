@@ -71,22 +71,18 @@
         });
       },
       async plusRole(data) {
-        const result = await CreateRole(data)
+        await CreateRole(data)
 
-        if (result.code === 200) {
-          this.$emit('cancel')
-          this.succeed()
-          this.$message.success(this.$t('afterCreateRole'))
-        }
+        this.$emit('cancel')
+        this.succeed()
+        this.$message.success(this.$t('afterCreateRole'))
       },
       async EditRole(data) {
-        const result = await UpdateRole({...data, id: this.roleId})
+        await UpdateRole({...data, id: this.roleId})
 
-        if (result.code === 200) {
-          this.$emit('cancel')
-          this.succeed()
-          this.$message.success(this.$t('afterEditeRole'))
-        }
+        this.$emit('cancel')
+        this.succeed()
+        this.$message.success(this.$t('afterEditeRole'))
       },
       handleCancel() {
         this.$emit('cancel')
@@ -94,12 +90,8 @@
       async getRoleInfo() {
         let result = await GetRoleInfo(this.roleId)
 
-        if (result.code === 200) {
-          const { roleCode, roleName } = result.data
-          this.form.setFieldsValue({ roleCode, roleName })
-        } else {
-          this.$message.error(result.msg)
-        }
+        const { roleCode, roleName } = result.data
+        this.form.setFieldsValue({ roleCode, roleName })
       },
     }
   }

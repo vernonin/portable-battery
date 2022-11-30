@@ -101,31 +101,25 @@
     },
     methods: {
       handleOk() {
-        this.form.validateFields((err, values) => {
+        this.form.validateFields(async (err, values) => {
           if (!err) {
             let { userSex } = values
-
             userSex = userSex === 'male' ? true : userSex === 'female' ? false : null
 
-            UpdateUser({...values, userSex, id: this.userId}).then(result => {
+            await UpdateUser({...values, userSex, id: this.userId})
 
-              if (result.code === 200) {
-                this.$emit('cancel')
-                this.created()
-                this.$message.success(this.$t('afterEditUser'))
-              }
-            })
+            this.$emit('cancel')
+            this.created()
+            this.$message.success(this.$t('afterEditUser'))
           }
         });
       },
       async getUserInfo() {
         let res = await GetUserInfo(this.userId)
         
-        if(res.code === 200) {
-          let { userSex } = res.data
+        let { userSex } = res.data
 
-          this.form.setFieldsValue({...res.data, userSex: userSex ? 'male' : 'female'});
-        }
+        this.form.setFieldsValue({...res.data, userSex: userSex ? 'male' : 'female'});
       },
       handleCancel() {
         this.$emit('cancel')
@@ -134,12 +128,10 @@
         this.openResetPwd = true
       },
       async confirmReset() {
-        const result = await ResetPassword(this.userId)
+        await ResetPassword(this.userId)
 
-        if (result.code === 200) {
-          this.openResetPwd = false
-          this.$message.success(this.$t('afterResetPwd'))
-        }
+        this.openResetPwd = false
+        this.$message.success(this.$t('afterResetPwd'))
       }
     }
   }

@@ -193,17 +193,15 @@
         this.$message.loading({ content: this.$t('updatingStatus'), key: updateStatusKey });
 
         try {
-          const result = await UpdateUserStatus(id)
+          await UpdateUserStatus(id)
 
-          if (result.code === 200) {
-            this.getPageUser()
-            this.$message.success({ content: this.$t('afterStatusUpdate'), key: updateStatusKey })
-          }
+          this.getPageUser()
+          this.$message.success({ content: this.$t('afterStatusUpdate'), key: updateStatusKey })
         }
         catch (error) {
           this.$message.success({ content: error.$message, key: updateStatusKey })
         }
-        
+
       },
       onBatch() {
         console.log('onBatch')
