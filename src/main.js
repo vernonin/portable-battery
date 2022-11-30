@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import {initRouter} from './router'
+import {router} from './router'
 import './theme/index.less'
 import Antd from 'ant-design-vue'
 import Viser from 'viser-vue'
@@ -12,7 +12,6 @@ import {initI18n} from '@/utils/i18n'
 import bootstrap from '@/bootstrap'
 import 'moment/locale/zh-cn'
 
-const router = initRouter(store.state.setting.asyncRoutes)
 const i18n = initI18n('CN', 'US')
 
 Vue.use(Antd)
