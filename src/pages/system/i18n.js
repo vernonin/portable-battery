@@ -57,7 +57,12 @@ module.exports = {
       parentMenu: '上级菜单',
       parentMenupl: '请选择上级菜单',
       updatingStatus: '更新状态中...',
-      afterStatusUpdate: '更新状态成功！'
+      afterCreateUser: '新建用户成功！',
+      afterEditUser: '修改成功！',
+      afterStatusUpdate: '更新状态成功！',
+      afterCreateRole: '新建角色成功！',
+      afterEditeRole: '修改成功',
+      afterResetPwd: '重置密码成功!',
     },
     HK: {
       userAccount: '用戶名',
@@ -116,7 +121,12 @@ module.exports = {
       parentMenu: '上級選單',
       parentMenupl: '請選擇上級選單',
       updatingStatus: '更新狀態中...',
+      afterCreateUser: '新建用戶成功！',
+      afterEditUser: '修改成功!',
       afterStatusUpdate: '更新狀態成功！',
+      afterCreateRole: '新建角色成功！',
+      afterEditeRole: '修改成功',
+      afterResetPwd: '重置密碼成功！',
     },
     US: {
       userAccount: 'Account',
@@ -175,7 +185,12 @@ module.exports = {
       parentMenu: 'Parent menu',
       parentMenupl: 'Please select parent menu',
       updatingStatus: 'Updating status...',
-      afterStatusUpdate: 'Update status succeeded!'
+      afterEditUser: 'Update user information succeeded!',
+      afterCreateUser: 'New a user succeeded!',
+      afterStatusUpdate: 'Update status succeeded!',
+      afterCreateRole: 'New a role succeeded!',
+      afterEditeRole: 'Update role information succeeded!',
+      afterResetPwd: 'Password reset succeeded!',
     },
   }
 }

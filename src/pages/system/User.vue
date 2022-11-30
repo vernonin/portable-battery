@@ -10,6 +10,8 @@
       :columns="columns"
       :data-source="users"
       :loading="tableLoading"
+      :pagination="pagination"
+      @change="tableChange"
     >
       <div slot="userSex" slot-scope="userSex">
         {{userSex ? '男' : '女'}}
@@ -141,6 +143,11 @@
         openEditUser: false,
         openImportUser: false,
         selectedRowKeys: [],
+        pagination: {
+          total: 0,
+          current: 1,
+          pageSize: 10
+        }
       }
     },
     created() {
@@ -148,14 +155,20 @@
     },
     methods: {
       onSelectChange(selectedRowKeys) {
-        this.selectedRowKeys = selectedRowKeys;
+        this.selectedRowKeys = selectedRowKeys
+      },
+      tableChange({ current }) {
+        this.pagination.current = current
+
+        this.getPageUser()
       },
       async getPageUser(query = {}) {
         this.tableLoading = true
         try {
-          let result = await GetUsers(query)
+          let result = await GetUsers({...query, ...this.pagination, size: this.pagination.pageSize})
           
           if (result.code === 200) {
+            this.pagination.total = result.data.total
             this.users = result.data.records.map(u => ({...u, key: u.id}))
           }
         }
@@ -165,11 +178,10 @@
         this.tableLoading = false
       },
       clearSelected() {
-        this.selectedRowKeys = [];
+        this.selectedRowKeys = []
       },
       onPlus() {
-        console.log('onPlus');
-        this.openPlusUser = true;
+        this.openPlusUser = true
       },
       onEdit({ id, status }) {
         if (status) {
@@ -178,34 +190,30 @@
         }
       },
       async changeStatus({ id }) {
-        this.$message.loading({ content: this.$t('updatingStatus'), updateStatusKey });
+        this.$message.loading({ content: this.$t('updatingStatus'), key: updateStatusKey });
 
         try {
           const result = await UpdateUserStatus(id)
 
           if (result.code === 200) {
             this.getPageUser()
-            this.$message.success({ content: this.$t('afterStatusUpdate'), updateStatusKey });
+            this.$message.success({ content: this.$t('afterStatusUpdate'), key: updateStatusKey })
           }
         }
         catch (error) {
-          this.$message.success({ content: error.$message, updateStatusKey });
+          this.$message.success({ content: error.$message, key: updateStatusKey })
         }
         
       },
       onBatch() {
-        console.log('onBatch');
+        console.log('onBatch')
       },
       onImport() {
-        this.openImportUser = true;
+        this.openImportUser = true
       },
       onExport() {
-        console.log('onExport');
+        console.log('onExport')
       }
     }
   }
 </script>
-
-<style scoped>
-
-</style>

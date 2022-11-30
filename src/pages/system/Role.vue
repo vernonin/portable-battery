@@ -10,6 +10,8 @@
       :columns="columns"
       :data-source="roles"
       :loading="tableLoading"
+      :pagination="pagination"
+      @change="tableChange"
     >
       <div slot="status" slot-scope="status">
         <a-badge status="success" v-if="status"/>
@@ -109,6 +111,11 @@
         tableLoading: false,
         openEditRole: false,
         openPermissRole: false,
+        pagination: {
+          total: 0,
+          current: 1,
+          pageSize: 10
+        }
       }
     },
     created() {
@@ -118,10 +125,15 @@
       onSelectChange(selectedRowKeys) {
         this.selectedRowKeys = selectedRowKeys;
       },
+      tableChange({ current }) {
+        this.pagination.current = current
+
+        this.getPageUser()
+      },
       async getPageRole(query = {}) {
         this.tableLoading = true
         try {
-          let result = await GetRoles(query)
+          let result = await GetRoles({...query, ...this.pagination, size: this.pagination.pageSize})
 
           if (result.code === 200) {
             this.roles = result.data.records.map(r => ({...r, key: r.id}))
@@ -133,20 +145,20 @@
         this.tableLoading = false
       },
       async changeStatus({ id }) {
-        this.$message.loading({ content: this.$t('updatingStatus'), updateStatusKey });
+        this.$message.loading({ content: this.$t('updatingStatus'), key: updateStatusKey });
 
         try {
           let result = await UpdateRoleStatus(id)
 
           if (result.code === 200) {
             this.getPageRole()
-            this.$message.success({ content: this.$t('afterStatusUpdate'), updateStatusKey });
+            this.$message.success({ content: this.$t('afterStatusUpdate'), key: updateStatusKey });
           } else {
             this.$message.error(result.msg)
           }
         }
         catch(error) {
-          this.$message.success({ content: error.$message, updateStatusKey });
+          this.$message.success({ content: error.$message, key: updateStatusKey });
         }
       },
       clearSelected() {

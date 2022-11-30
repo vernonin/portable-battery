@@ -112,10 +112,8 @@
               if (result.code === 200) {
                 this.$emit('cancel')
                 this.created()
-                this.$message.success('修改用户信息成功！')
+                this.$message.success(this.$t('afterEditUser'))
               }
-            }).catch(() => {
-              this.$message.error('修改用户信息失败！')
             })
           }
         });
@@ -140,9 +138,7 @@
 
         if (result.code === 200) {
           this.openResetPwd = false
-          this.$message.success('重置密码成功！')
-        } else {
-          this.$message.error('重置密码失败！')
+          this.$message.success(this.$t('afterResetPwd'))
         }
       }
     }

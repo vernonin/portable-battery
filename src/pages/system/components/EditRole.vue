@@ -76,9 +76,7 @@
         if (result.code === 200) {
           this.$emit('cancel')
           this.succeed()
-          this.$message.success('新建角色成功！')
-        } else {
-          this.$message.error('新建角色失败！')
+          this.$message.success(this.$t('afterCreateRole'))
         }
       },
       async EditRole(data) {
@@ -87,9 +85,7 @@
         if (result.code === 200) {
           this.$emit('cancel')
           this.succeed()
-          this.$message.success('修改角色成功！')
-        } else {
-          this.$message.error('修改角色失败！')
+          this.$message.success(this.$t('afterEditeRole'))
         }
       },
       handleCancel() {

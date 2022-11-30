@@ -84,7 +84,7 @@
 
             CreateUser({...values, userSex, userPassword}).then((result) => {
               if(result.code === 200) {
-                this.$message.success('新建用户成功！');
+                this.$message.success(this.$t('afterCreateUser'));
 
                 this.$emit('cancel');
                 this.created();
@@ -101,6 +101,3 @@
     }
   }
 </script>
-
-<style scoped>
-</style>
