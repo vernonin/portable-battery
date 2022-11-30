@@ -24,13 +24,11 @@
               <a-select-option value="female">{{$t('female')}}</a-select-option>
             </a-select>
           </a-form-item>
-          <a-form-item :label="$t('roleDescribe')">
-            <a-textarea
-              v-decorator="['roleDescribe']"
-              :placeholder="$t('multilineInput')"
-              :rows="4"
+          <a-form-item :label="$t('menuSort')">
+            <a-input
+              v-decorator="['menuSort']"
+              :placeholder="$t('menuSortpl')"
             />
-
           </a-form-item>
         </a-col>
         <a-col :span="12">
@@ -46,12 +44,6 @@
               :placeholder="`${$t('routePathpl')}`"
             />
           </a-form-item>
-          <a-form-item :label="$t('menuSort')">
-            <a-input
-              v-decorator="['menuSort']"
-              :placeholder="$t('menuSortpl')"
-            />
-          </a-form-item>
         </a-col>
       </a-row>
     </a-form>
@@ -59,6 +51,8 @@
 </template>
 
 <script>
+  import { GetMenuTree } from '@/services/menu'
+
   export default {
     name: 'PlusUser',
     i18n: require('../i18n'),
@@ -70,6 +64,11 @@
       return {
         form: this.$form.createForm(this, { name: 'coordinated' }),
       }
+    },
+    created() {
+      GetMenuTree().then(res => {
+        console.log(res);
+      })
     },
     methods: {
       handleOk() {

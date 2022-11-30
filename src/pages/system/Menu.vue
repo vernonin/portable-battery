@@ -8,12 +8,12 @@
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
-      :data-source="data"
+      :data-source="menus"
     >
       <div slot="status" slot-scope="status">
-        <a-badge status="success" v-if="status === '生效'"/>
+        <a-badge status="success" v-if="status"/>
         <a-badge status="default" v-else />
-        {{status}}
+        {{status ? '生效' : '失效'}}
       </div>
 
       <div slot="action">
@@ -33,6 +33,8 @@
   import SelectAlert from '@/components/tool/SelectAlert.vue';
   import ButtonBar from '@/components/tool/ButtonBar.vue';
   import PlusMenu from './components/PlusMenu.vue';
+
+  import { GetMenus } from '@/services/menu'
 
   // 二维数组：第一层代表列，第二层代表每列的Form.Item
   const searchFormData = [
@@ -80,44 +82,14 @@
   ]
 
   const columns = [
-    { title: '菜单编号', dataIndex: 'menuNumber', key: 'roleNumber', width: 150  },
-    { title: '菜单名称', dataIndex: 'menuName', key: 'roleName', width: 150 },
+    { title: '菜单编号', dataIndex: 'code', key: 'code', width: 150  },
+    { title: '菜单名称', dataIndex: 'menuName', key: 'menuName', width: 150 },
     { title: '菜单图标', dataIndex: 'mneuIcon', key: 'mneuIcon' },
-    { title: '路由地址', dataIndex: 'routePath', key: 'routePath' },
-    { title: '菜单排序', dataIndex: 'menuSort', key: 'menuSort' },
-    { title: '状态', dataIndex: 'status', key: 'status', width: 120, scopedSlots: { customRender: 'status' } },
+    { title: '路由地址', dataIndex: 'path', key: 'path' },
+    { title: '菜单排序', dataIndex: 'sort', key: 'sort', align: 'center' },
+    { title: '状态', dataIndex: 'status', key: 'status', width: 120, align: 'center', scopedSlots: { customRender: 'status' } },
     { title: '操作', dataIndex: '', key: 'active', width: 200, align: 'center', scopedSlots: { customRender: 'action' } },
   ];
-
-  const data = [
-    {
-      key: '1',
-      menuNumber: 1001,
-      menuMame: '管理员',
-      menuIcon: '',
-      routePath: '/ltc/customer',
-      menuSort: 1,
-      status: '生效',
-    },
-    {
-      key: '3',
-      menuNumber: 1002,
-      menuMame: '店长菜单',
-      menuIcon: '',
-      routePath: '/ltc/customer1',
-      menuSort: 2,
-      status: '失效',
-    },
-    {
-      key: '55',
-      menuNumber: 1003,
-      menuName: '收银员菜单',
-      menuIcon: '',
-      routePath: '/ltc/customer2',
-      menuSort: 3,
-      status: '生效',
-    },
-  ]
 
   export default {
     name: 'Menu',
@@ -125,19 +97,43 @@
     components: { SearchForm, SelectAlert, ButtonBar, PlusMenu },
     data() {
       return {
-        data,
         columns,
         barbtns,
         searchFormData,
         
         TYPE: 'PLUS',
         openPlusMenu: false,
+        menus: [],
         selectedRowKeys: [],
+
+        pagination: {
+          total: 0,
+          current: 1,
+          pageSize: 10
+        }
       }
+    },
+    created() {
+      this.getPageMenu()
     },
     methods: {
       onSelectChange(selectedRowKeys) {
         this.selectedRowKeys = selectedRowKeys;
+      },
+      async getPageMenu(query = {}) {
+        try {
+          let result = await GetMenus({...query, ...this.pagination, size: this.pagination.pageSize})
+
+          if (result.code === 200) {
+            this.pagination.total = result.data.total
+            this.menus = result.data.records.map(m => ({...m, key: m.id}))
+          }
+        }
+        catch {
+          this.menus = []
+        }
+
+
       },
       clearSelected() {
         this.selectedRowKeys = [];

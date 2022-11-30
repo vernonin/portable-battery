@@ -149,9 +149,10 @@ export default {
       }
     }
     .admin-layout-content{
+      height: calc(100vh - 64px - 122px);
       padding: 0 24px;
-      /*overflow-x: hidden;*/
-      /*min-height: calc(100vh - 64px - 122px);*/
+      overflow-x: hidden;
+      overflow-y: scroll;
     }
     .setting{
       background-color: @primary-color;

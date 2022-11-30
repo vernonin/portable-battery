@@ -114,8 +114,7 @@ export default {
               this.$message.error(result.msg);
             }
           } catch (err){
-            console.log('++', err.message)
-            this.$message.error(err.message);
+            // pass
           }
           this.logging = false
         }

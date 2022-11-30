@@ -5,8 +5,8 @@ const S_M_URL = '/api/system-server/menu'
  * 分页获取角色
  * @returns 
  */
-export function GetMenus() {
-	return http.get(`${S_M_URL}/menuPage`)
+export function GetMenus(params) {
+	return http.get(`${S_M_URL}/menuPage`, { params })
 }
 
 /**
