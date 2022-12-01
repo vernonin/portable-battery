@@ -55,7 +55,6 @@ export default {
       state.isMobile = isMobile
     },
     setTheme (state, theme) {
-      console.log('theme', theme);
       state.theme = theme
     },
     setLayout (state, layout) {

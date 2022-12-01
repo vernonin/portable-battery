@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GET_AUTH, REMOVE_AUTH } from '@/utils/auth'
+import { SET_AUTH, GET_AUTH, CLEAR_AUTH } from './auth'
 import {message} from 'ant-design-vue'
 
 import { router } from '@/router'
@@ -21,18 +21,30 @@ serve.interceptors.request.use(config => {
 })
 
 serve.interceptors.response.use(response => {
-  return response.data
+  const { data, headers } = response
+
+  if(headers && headers.new_token) {
+    SET_AUTH(headers.new_token)
+  }
+
+  return data
+
 }, error => {
   const { data, status } = error.response
 
   if (error.response && status === 401) {
     // 删除本地存储的错误token
-    REMOVE_AUTH()
+    CLEAR_AUTH()
+    message.warning(data.msg)
     // 跳转登录页面
     router.replace({ path: '/login' })
+  } else if (error.response && status >= 500) {
+    message.error('服务端内部异常，请稍后重试！')
+  } else {
+    message.error(data.message || data.msg)
   }
 
-  message.error(data.message || data.msg)
+
   return Promise.reject(error)
 
 })

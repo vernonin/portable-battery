@@ -17,3 +17,9 @@ export const GET_AUTH =() => {
 export const REMOVE_AUTH = () => {
   localStorage.removeItem(TOKEN_KEY)
 }
+
+export const CLEAR_AUTH = () => {
+  REMOVE_AUTH()
+
+  localStorage.removeItem(process.env.VUE_APP_USER_KEY)
+}

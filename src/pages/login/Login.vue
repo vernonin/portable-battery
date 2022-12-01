@@ -122,12 +122,13 @@ export default {
     },
     afterLogin(data) {
 
-      const {permissions, roles} = data
-      this.setUser(data)
+      this.setUser({...data, token: ''})
       SET_AUTH(data.token)
-      this.setPermissions(permissions)
-      this.setRoles(roles)
       this.$router.replace('/dashboard/analysis')
+
+      // const {permissions, roles} = data
+      // this.setPermissions(permissions)
+      // this.setRoles(roles)
       // setAuthorization({token: data.token, expireAt: new Date(data.expireAt)})
       // 获取路由配置
       // getRoutesConfig().then(result => {
