@@ -1,7 +1,7 @@
 <template>
   <a-dropdown>
     <div class="header-avatar" style="cursor: pointer">
-      <a-avatar class="avatar" size="small" shape="circle" :src="user.userAvatarUrl"/>
+      <a-avatar class="avatar" size="small" shape="circle" :src="(user.userAvatarUrl || require('@/assets/img/default-avatar.png'))"/>
       <span class="name">{{user.userName}}</span>
     </div>
     <a-menu :class="['avatar-menu']" slot="overlay">
@@ -47,7 +47,7 @@ export default {
       align-self: center;
     }
     .avatar{
-      margin-right: 8px;
+      margin-right: 5px;
     }
     .name{
       font-weight: 500;

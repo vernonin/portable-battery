@@ -10,7 +10,6 @@ module.exports = {
       home: {name: '首頁'},
       dashboard: {
         name: 'Dashboard',
-        workplace: {name: '工作台'},
         analysis: {name: '分析頁'}
       },
       form: {
@@ -51,6 +50,11 @@ module.exports = {
         name: '小組件',
         taskCard: {name: '任務卡片'},
         palette: {name: '顏色複選框'}
+      },
+      workplace: {
+        name: '工作臺',
+        business: {name: '商機管理'},
+        cabinet: {name: '機櫃管理'}
       },
       system: {
         name: '系統管理',

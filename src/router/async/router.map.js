@@ -22,10 +22,6 @@ const routerMap = {
     name: 'Dashboard',
     component: view.blank
   },
-  workplace: {
-    name: '工作台',
-    component: () => import('@/pages/dashboard/workplace')
-  },
   analysis: {
     name: '分析页',
     component: () => import('@/pages/dashboard/analysis')

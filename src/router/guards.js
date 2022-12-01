@@ -28,8 +28,18 @@ const progressStart = (to, from, next) => {
  */
 const loginGuard = (to, from, next, options) => {
   const {message} = options
+
+  if (to.path === '/') {
+    if (GET_AUTH()) {
+      next()
+    } else {
+      next({path: '/login'})
+    }
+  }
+
+
   if (!loginIgnore.includes(to) && !GET_AUTH()) {
-    message.warning('登录已失效，请重新登录')
+    message.warning('请重新登录后访问！')
     next({path: '/login'})
   } else {
     next()

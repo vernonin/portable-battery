@@ -25,7 +25,7 @@ const options = {
       path: '/',
       name: '首页',
       component: TabsView,
-      redirect: '/login',
+      redirect: '/dashboard/analysis',
       children: [
         {
           path: 'dashboard',
@@ -35,16 +35,6 @@ const options = {
           },
           component: BlankView,
           children: [
-            {
-              path: 'workplace',
-              name: '工作台',
-              meta: {
-                page: {
-                  closable: false
-                }
-              },
-              component: () => import('@/pages/dashboard/workplace'),
-            },
             {
               path: 'analysis',
               name: '分析页',
@@ -165,7 +155,7 @@ const options = {
           ]
         },
         {
-          path: 'workbench',
+          path: 'workplace',
           name: '工作台',
           meta: {
             icon: 'appstore'
@@ -175,12 +165,12 @@ const options = {
             {
               path: 'business',
               name: '商机管理',
-              component: () => import('@/pages/workbench/Business')
+              component: () => import('@/pages/workplace/Business')
             },
             {
               path: 'cabinet',
               name: '机柜管理',
-              component: () => import('@/pages/workbench/Cabinet')
+              component: () => import('@/pages/workplace/Cabinet')
             }
           ]
         },

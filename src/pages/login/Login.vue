@@ -64,7 +64,7 @@
           <a-icon class="icon" type="alipay-circle" />
           <a-icon class="icon" type="taobao-circle" />
           <a-icon class="icon" type="weibo-circle" />
-          <router-link style="float: right" to="/dashboard/workplace" >注册账户</router-link>
+          <router-link style="float: right" to="/dashboard/analysis" >注册账户</router-link>
         </div>
       </a-form>
     </div>
@@ -127,7 +127,7 @@ export default {
       SET_AUTH(data.token)
       this.setPermissions(permissions)
       this.setRoles(roles)
-      this.$router.replace('/dashboard/workplace')
+      this.$router.replace('/dashboard/analysis')
       // setAuthorization({token: data.token, expireAt: new Date(data.expireAt)})
       // 获取路由配置
       // getRoutesConfig().then(result => {

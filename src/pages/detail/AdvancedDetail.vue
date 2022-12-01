@@ -24,7 +24,7 @@
       <a-steps :current="1" progress-dot :direction="isMobile ? 'vertical' : 'horizontal'">
         <a-step title="创建项目">
           <a-step-item-group :align="isMobile ? 'left' : 'center'" slot="description">
-            <a-step-item link="/dashboard/workplace" title="曲丽丽" icon="dingding-o"/>
+            <a-step-item link="/dashboard/analysis" title="曲丽丽" icon="dingding-o"/>
             <a-step-item title="2016-12-12 12:32"/>
           </a-step-item-group>
         </a-step>
