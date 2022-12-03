@@ -9,6 +9,7 @@
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :data-source="menus"
+      :expanded-row-keys.sync="expandedRowKeys"
     >
       <div slot="status" slot-scope="status">
         <a-badge status="success" v-if="status"/>
@@ -105,7 +106,7 @@
         openPlusMenu: false,
         menus: [],
         selectedRowKeys: [],
-
+        expandedRowKeys: [],
         pagination: {
           total: 0,
           current: 1,

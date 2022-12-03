@@ -35,7 +35,7 @@ serve.interceptors.response.use(response => {
   if (error.response && status === 401) {
     // 删除本地存储的错误token
     CLEAR_AUTH()
-    message.warning(data.msg)
+    message.warning(data.message)
     // 跳转登录页面
     router.replace({ path: '/login' })
   } else if (error.response && status >= 500) {
