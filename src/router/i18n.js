@@ -53,8 +53,9 @@ module.exports = {
       },
       workplace: {
         name: '工作臺',
-        business: {name: '商機管理'},
-        cabinet: {name: '機櫃管理'}
+        store: {name: '商戶管理'},
+        cabinet: {name: '機櫃管理'},
+        battery: {name: '充電寶管理'},
       },
       system: {
         name: '系統管理',

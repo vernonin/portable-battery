@@ -65,8 +65,8 @@
         name: 'status',
         placeholder: '请选择状态',
         options: [
-          { label: '生效', value: 'shengxiao' },
-          { label: '失效', value: 'shixiao' }
+          { label: '生效', value: 'valid' },
+          { label: '失效', value: 'invalid' }
         ]
       }
     ]

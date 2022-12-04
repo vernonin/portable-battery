@@ -163,14 +163,19 @@ const options = {
           component: PageView,
           children: [
             {
-              path: 'business',
-              name: '商机管理',
-              component: () => import('@/pages/workplace/Business')
+              path: 'store',
+              name: '商户管理',
+              component: () => import('@/pages/workplace/Store')
             },
             {
               path: 'cabinet',
               name: '机柜管理',
               component: () => import('@/pages/workplace/Cabinet')
+            },
+            {
+              path: 'battery',
+              name: '充电宝管理',
+              component: () => import('@/pages/workplace/Battery')
             }
           ]
         },

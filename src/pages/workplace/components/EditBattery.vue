@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    :title="type === 'PLUS' ? $t('createRole') : $t('editRole')"
+    :title="type === 'PLUS' ? $t('createBattery') : $t('editBattery')"
     width="700px"
     :visible="visible"
     @ok="handleOk"
@@ -9,17 +9,17 @@
     <a-form :form="form" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
       <a-row>
         <a-col :span="12">
-          <a-form-item :label="$t('roleCode')">
+          <a-form-item :label="$t('batteryNumber')">
             <a-input
-              v-decorator="['roleCode', { rules: [{ required: true, message: $t('roleCodepl') }] }]"
-              :placeholder="$t('roleCodepl')"
+              v-decorator="['batteryNumber', { rules: [{ required: true, message: $t('batteryNumberpl') }] }]"
+              :placeholder="$t('batteryNumberpl')"
             />
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item :label="$t('roleName')">
+          <a-form-item :label="$t('status')">
             <a-input
-              v-decorator="['roleName', { rules: [{ required: true, message: $t('roleNamepl') }] }]"
+              v-decorator="['batteryStatus']"
               :placeholder="`${$t('roleNamepl')}`"
             />
           </a-form-item>
@@ -30,14 +30,15 @@
 </template>
 
 <script>
-  import { CreateRole, UpdateRole, GetRoleInfo } from '@/services/role'
+	import { CreateBattery } from '@/services/battery'
+
   export default {
-    name: 'EditRole',
+    name: 'EditBattery',
     i18n: require('../i18n'),
     props: {
       visible: { type: Boolean, default: false },
       type: { type: String, default: 'PLUS'},
-      roleId: { type: String, default: ''},
+      batteryId: { type: String, default: ''},
       succeed: { type: Function }
     },
     data() {
@@ -56,11 +57,10 @@
       handleOk() {
         this.form.validateFields((err, values) => {
           if (!err) {
-            console.info('success:',this.type, values);
 
             switch(this.type) {
               case 'PLUS':
-                this.plusRole(values)
+                this.plusBattery(values)
                 break;
               case 'EDIT':
                 this.EditRole(values)
@@ -70,28 +70,29 @@
           }
         });
       },
-      async plusRole(data) {
-        await CreateRole(data)
+      async plusBattery(data) {
+				console.log(data);
+        await CreateBattery(data)
 
         this.$emit('cancel')
         this.succeed()
-        this.$message.success(this.$t('afterCreateRole'))
+        this.$message.success(this.$t('afterCreateBattery'))
       },
-      async EditRole(data) {
-        await UpdateRole({...data, id: this.roleId})
+      async EditRole() {
+        // await UpdateRole({...data, id: this.roleId})
 
-        this.$emit('cancel')
-        this.succeed()
-        this.$message.success(this.$t('afterEditeRole'))
+        // this.$emit('cancel')
+        // this.succeed()
+        // this.$message.success(this.$t('afterEditeRole'))
       },
       handleCancel() {
         this.$emit('cancel')
       },
       async getRoleInfo() {
-        let result = await GetRoleInfo(this.roleId)
+        // let result = await GetRoleInfo(this.batteryId)
 
-        const { roleCode, roleName } = result.data
-        this.form.setFieldsValue({ roleCode, roleName })
+        // const { roleCode, roleName } = result.data
+        // this.form.setFieldsValue({ roleCode, roleName })
       },
     }
   }

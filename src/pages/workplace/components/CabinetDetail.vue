@@ -49,7 +49,14 @@
         </div>
 
         <div slot="action" slot-scope="cabinet">
-          <a-progress :percent="(cabinet.power * 10)" :status="cabinet.batteryStatus === 'FREE' ? 'active' : ''" />
+          <a-progress
+            :percent="(cabinet.power * 10)"
+            :status="cabinet.batteryStatus === 'FREE' ? 'active' : ''"
+            :stroke-color="cabinet.power <= 3 ? {
+              '0%': '#FF4D52',
+              '100%': '#FF4D52',
+            } : {}"
+          />
         </div>
       </a-table>
     </a-drawer>
