@@ -32,9 +32,17 @@
 </template>
 
 <script>
+  const systemI18n = require('@/pages/system/i18n')
+  const workplaceI18n = require('@/pages/workplace/i18n')
   export default {
     name: 'SearchForm',
-    i18n: require('@/pages/system/i18n'),
+    i18n: {
+      messages: {
+        CN: {...systemI18n.messages.CN, ...workplaceI18n.messages.CN },
+        HK: {...systemI18n.messages.HK, ...workplaceI18n.messages.HK },
+        US: {...systemI18n.messages.US, ...workplaceI18n.messages.CN },
+      }
+    },
     props: {
       formData: { type: Array, default: () => [] },
       onSearch: { type: Function }
@@ -47,7 +55,6 @@
     },
     methods: {
       handleReset() {
-        console.log(this.form);
         this.form.resetFields();
       },
       handleSubmit(e) {
