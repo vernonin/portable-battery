@@ -1,5 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
+
+//main.js
+import Viewer from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
+
 import {router} from './router'
 import './theme/index.less'
 import Antd from 'ant-design-vue'
@@ -15,6 +20,7 @@ import 'moment/locale/zh-cn'
 const i18n = initI18n('CN', 'US')
 
 Vue.use(Antd)
+Vue.use(Viewer)
 Vue.config.productionTip = false
 Vue.use(Viser)
 Vue.use(Plugins)

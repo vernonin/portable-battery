@@ -1,7 +1,7 @@
 <template>
   <div style="background-color: #fff;padding: 12px;">
     <SearchForm :form-data="searchFormData" :on-search="getPageStore" />
-    <ButtonBar :btns="barbtns" />
+    <ButtonBar :btns="barbtns" @plus="onPlus" />
     <SelectAlert :num="selectedRowKeys.length" @clear="selectedRowKeys = []" />
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
@@ -11,11 +11,11 @@
       :pagination="pagination"
       @change="tableChange"
     >
-      <div slot="storeImageUrl" slot-scope="cabinet">
-        <a @click="showImage(cabinet)">查看图片</a>
+      <div slot="storeImageUrl" slot-scope="storeImageUrl">
+        <a @click="showImage(storeImageUrl)">查看图片</a>
       </div>
-      <div slot="generateQR" slot-scope="cabinet">
-        <a @click="onGenerateQR(cabinet)">生成二维码</a>
+      <div slot="generateQR">
+        
       </div>
 
       <div slot="status" slot-scope="status">
@@ -30,15 +30,19 @@
         <a>{{cabinet.status ? $t('invalid') : $t('valid')}}</a>
       </div>
     </a-table>
-    <CabinetDetail :id="currentId" :visible="openDetail" @close="openDetail = false" />
+    <EditStore :visible="openEditStore" @close="openEditStore = false" />
+
+    <viewer :images="storeImageUrl" style="display: none;">
+      <img id="viewer" :src="storeImageUrl[0]">
+    </viewer>
   </div>
 </template>
 
 <script>
+  import EditStore from './components/EditStore.vue';
   import ButtonBar from '@/components/tool/ButtonBar.vue';
   import SearchForm from '@/components/tool/SearchForm.vue';
   import SelectAlert from '@/components/tool/SelectAlert.vue';
-  import CabinetDetail from './components/CabinetDetail.vue';
 
   import { GetStores } from '@/services/store'
 
@@ -48,7 +52,7 @@
     { title: '联系方式', dataIndex: 'contact	', key: 'contact	', width: 120, align: 'center' },
     { title: '商户地址', dataIndex: 'address', key: 'address', align: 'center' },
     { title: '商户图片', dataIndex: 'storeImageUrl', key: 'storeImageUrl', width: 100, align: 'center', scopedSlots: { customRender: 'storeImageUrl' } },
-    { title: '分成比例', dataIndex: 'generateQR', key: 'generateQR', width: 120, scopedSlots: { customRender: 'generateQR' }  },
+    { title: '分成比例', dataIndex: 'commissionRate', key: 'commissionRate', width: 100, align: 'center', },
     { title: '状态', dataIndex: 'status', key: 'status', width: 100, align: 'center', scopedSlots: { customRender: 'status' } },
     { title: '操作', dataIndex: '', key: 'active', width: 120, align: 'center', scopedSlots: { customRender: 'action' } },
   ];
@@ -120,7 +124,7 @@
   export default {
     name: 'Store',
     i18n: require('./i18n'),
-    components: { SearchForm, ButtonBar, SelectAlert, CabinetDetail },
+    components: { SearchForm, ButtonBar, SelectAlert, EditStore },
     data() {
       return {
         barbtns,
@@ -129,7 +133,9 @@
         
         cabinets: [],
         selectedRowKeys: [],
-        openDetail: false,
+        storeImageUrl: [],
+        imgs: [],
+        openEditStore: false,
         tableLoading: false,
         currentId: '',
         pagination: {
@@ -165,8 +171,15 @@
         
         this.tableLoading = false
       },
+      onPlus() {
+        this.openEditStore = true
+      },
       showImage(url) {
         console.log(url)
+        this.storeImageUrl = [url]
+        setTimeout(() => {
+          document.getElementById('viewer').click()
+        }, 100)
       },
       onGenerateQR(cabinet) {
         console.log(cabinet);
@@ -174,10 +187,6 @@
       onEdit(cabinet) {
         console.log(cabinet)
       },
-      showInfo({ id }) {
-        this.currentId = id
-        this.openDetail = true
-      }
     }
   }
 </script>

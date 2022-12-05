@@ -1,7 +1,7 @@
 <template>
   <div style="background-color: #fff;padding: 12px;">
     <SearchForm :form-data="searchFormData" :on-search="getPageCabinet" />
-    <ButtonBar :btns="barbtns" />
+    <ButtonBar :btns="barbtns" @plus="onPlus" />
     <SelectAlert :num="selectedRowKeys.length" @clear="selectedRowKeys = []" />
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
@@ -36,14 +36,16 @@
       </div>
     </a-table>
     <CabinetDetail :id="currentId" :visible="openDetail" @close="openDetail = false" />
+    <EditCabinet :visible="openEditCabinet" :type="TYPE" :cabinetId="currentId" :succeed="getPageCabinet" @cancel="openEditCabinet = false" />
   </div>
 </template>
 
 <script>
+  import EditCabinet from './components/EditCabinet.vue';
   import ButtonBar from '@/components/tool/ButtonBar.vue';
   import SearchForm from '@/components/tool/SearchForm.vue';
-  import SelectAlert from '@/components/tool/SelectAlert.vue';
   import CabinetDetail from './components/CabinetDetail.vue';
+  import SelectAlert from '@/components/tool/SelectAlert.vue';
 
   import { GetCabinets, DeleteCabinet } from '@/services/cabinet'
 
@@ -119,17 +121,18 @@
   export default {
     name: 'Cabinet',
     i18n: require('./i18n'),
-    components: { SearchForm, ButtonBar, SelectAlert, CabinetDetail },
+    components: { SearchForm, ButtonBar, SelectAlert, CabinetDetail, EditCabinet },
     data() {
       return {
         barbtns,
         columns,
         searchFormData,
-        
+        TYPE: 'PLUS',
         cabinets: [],
         selectedRowKeys: [],
         openDetail: false,
         tableLoading: false,
+        openEditCabinet: false,
         currentId: '',
         pagination: {
           total: 0,
@@ -167,8 +170,14 @@
       onGenerateQR(cabinet) {
         console.log(cabinet);
       },
-      onEdit(cabinet) {
-        console.log(cabinet)
+      onPlus() {
+        this.TYPE = 'PLUS'
+        this.openEditCabinet = true
+      },
+      onEdit({ id }) {
+        this.TYPE = 'EDIT'
+        this.currentId = id
+        this.openEditCabinet = true
       },
       showInfo({ id }) {
         this.currentId = id

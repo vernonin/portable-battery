@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@amap/amap-jsapi-loader@^1.0.1":
+  "integrity" "sha512-nPyLKt7Ow/ThHLkSvn2etQlUzqxmTVgK7bIgwdBRTg2HK5668oN7xVxkaiRe3YZEzGzfV2XgH5Jmu2T73ljejw=="
+  "resolved" "https://registry.npmjs.org/@amap/amap-jsapi-loader/-/amap-jsapi-loader-1.0.1.tgz"
+  "version" "1.0.1"
+
 "@ant-design/colors@^3.1.0":
   "integrity" "sha1-WtQ9YZ6RHzSI66wwPWBuZqhCOQM="
   "resolved" "https://registry.npm.taobao.org/@ant-design/colors/download/@ant-design/colors-3.2.2.tgz"
@@ -9854,6 +9859,11 @@
     "loader-utils" "^1.1.0"
     "neo-async" "^2.6.0"
 
+"throttle-debounce@^2.0.1":
+  "integrity" "sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ=="
+  "resolved" "https://registry.npmjs.org/throttle-debounce/-/throttle-debounce-2.3.0.tgz"
+  "version" "2.3.0"
+
 "through@^2.3.6", "through@~2.3.4", "through@~2.3.8":
   "integrity" "sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU="
   "resolved" "https://registry.npm.taobao.org/through/download/through-2.3.8.tgz"
@@ -10318,6 +10328,14 @@
   "resolved" "https://registry.npm.taobao.org/uuid/download/uuid-3.4.0.tgz"
   "version" "3.4.0"
 
+"v-viewer@^1.6.4":
+  "integrity" "sha512-LVkiUHpmsbsZXebeNXnu8krRCi5i2n07FeLFxoIVGhw8lVvTBO0ffpbDC6mLEuacCjrIh09HjIqpciwUtWE8lQ=="
+  "resolved" "https://registry.npmjs.org/v-viewer/-/v-viewer-1.6.4.tgz"
+  "version" "1.6.4"
+  dependencies:
+    "throttle-debounce" "^2.0.1"
+    "viewerjs" "^1.5.0"
+
 "v8-compile-cache@^2.0.3":
   "integrity" "sha1-VLw83UMxe8qR413K8wWxpyN950U="
   "resolved" "https://registry.npm.taobao.org/v8-compile-cache/download/v8-compile-cache-2.1.1.tgz"
@@ -10358,6 +10376,11 @@
     "assert-plus" "^1.0.0"
     "core-util-is" "1.0.2"
     "extsprintf" "^1.2.0"
+
+"viewerjs@^1.5.0":
+  "integrity" "sha512-/VQ2zalHLZJOGIwlxOBtxagLZwNvU3Bf+nm692XlhNFxjBXRxpCVn+GeqmRFg9jK1Y2+Wf8PPGxZgTDN4pHXww=="
+  "resolved" "https://registry.npmjs.org/viewerjs/-/viewerjs-1.11.1.tgz"
+  "version" "1.11.1"
 
 "viser-vue@^2.4.8":
   "integrity" "sha1-P9sFhEXLpZwczunMnCAkvsKZJtQ="
