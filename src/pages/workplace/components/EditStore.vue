@@ -1,7 +1,7 @@
 <template>
   <a-drawer
-      :title="$t('createStore')"
-      :width="720"
+      :title="type === 'PLUS' ? $t('createStore') : type === 'EDIT' ? $t('editStore') : ''"
+      width="60vw"
       :visible="visible"
       :body-style="{ paddingBottom: '80px' }"
       @close="onClose"
@@ -51,50 +51,38 @@
           </a-col>
           <a-col :span="12">
             <a-form-item :label="$t('bonus')">
-              <a-input
+              <a-select
                 v-decorator="[
-                  'bonus',
-                  {
-                    rules: [{ required: true, message: $t('bonuspl') }],
-                  },
+                  'commissionRate',
+                  { rules: [{ required: true, message: $t('bonuspl') }] },
                 ]"
-                placeholder="请输入1-100"
-              />
+                :placeholder="$t('bonuspl')"
+              >
+                <a-select-option :value="(i / 10)" :key="i" v-for="i in 10">{{(i / 10)}}</a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="16">
-          <a-col :span="12">
-            <a-form-item :label="$t('location')">
-              <a-input
-                v-decorator="[
-                  'location',
-                ]"
-                :placeholder="$t('locationpl')"
-              />
-            </a-form-item>
-          </a-col>
           <a-col :span="12">
             <a-form-item :label="$t('storeImage')">
               <a-upload
                 v-decorator="[
                   'storeImageUrl',
                   {
-                    valuePropName: 'fileList',
                     getValueFromEvent: normFile,
                   },
                 ]"
-                name="logo"
-                action="/upload.do"
+                :headers="header"
+                name="img"
+                action="/api/system-server/upload/upload"
                 list-type="picture"
               >
                 <a-button :block="true" style="width: 100%;"> <a-icon type="upload" />{{$t('clickUpload')}}</a-button>
               </a-upload>
             </a-form-item>
           </a-col>
-        </a-row>
-        <a-row :gutter="16">
-          <a-col :span="24">
+          <a-col :span="12">
             <a-form-item :label="$t('address')">
               <a-textarea
                 v-decorator="[
@@ -112,16 +100,16 @@
         <a-row :gutter="16">
           <a-col :span="12">
             <a-form-item :label="$t('longitude')">
-              <a-input v-decorator="['longitude']" :placeholder="$t('latitudepl')" />
+              <a-input v-decorator="['eastLongitude']" :placeholder="$t('latitudepl')" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item :label="$t('latitude')">
-              <a-input v-decorator="['latitude']" :placeholder="$t('latitudepl')" />
+              <a-input v-decorator="['northLatitude']" :placeholder="$t('latitudepl')" />
             </a-form-item>
           </a-col>
         </a-row>
-        <Map :on-click="onMap"/>
+        <Map :center="mapCenter" :on-click="onMap"/>
       </a-form>
       <div
         :style="{
@@ -139,7 +127,7 @@
         <a-button :style="{ marginRight: '8px' }" @click="onClose">
           {{$t('cancel')}}
         </a-button>
-        <a-button type="primary" @click="onClose">
+        <a-button type="primary" :loading="confirmLoading" @click="onConfirm">
           {{$t('confirm')}}
         </a-button>
       </div>
@@ -149,16 +137,37 @@
 <script>
   import Map from '@/components/map/Map.vue'
 
+  import { GET_AUTH } from '@/utils/auth'
+  import { CreateStore, UpdateStore, GetStore } from '@/services/store'
+
   export default {
     name: 'EditStore',
     i18n: require('../i18n'),
     components: { Map },
     props: {
-      visible: { type: Boolean, default: false }
+      visible: { type: Boolean, default: false },
+      type: { type: String, default: 'PLUS' },
+      id: { type: String, default: '' },
+      succeed: { type: Function }
     },
     data() {
       return {
+        header: {
+          Authorization: 'Bearer ' + GET_AUTH(),
+        },
+        mapCenter: [113.350658, 23.129519],
+        confirmLoading: false,
         form: this.$form.createForm(this),
+      }
+    },
+    watch: {
+      visible(newVal) {
+        if (newVal) {
+          this.clearForm()
+          if (this.type === 'EDIT') {
+            this.getDetails()
+          }
+        }
       }
     },
     methods: {
@@ -169,17 +178,76 @@
         this.$emit('close')
       },
       normFile(e) {
-        console.log('Upload event:', e);
         if (Array.isArray(e)) {
-          return e;
+          return e[0].response?.data;
         }
-        return e && e.fileList;
+        return e && e.fileList[0].response?.data
       },
       onMap(position) {
         this.form.setFieldsValue({
-          longitude: position[0],
-          latitude: position[1]
+          eastLongitude: position[0],
+          northLatitude: position[1]
         })
+      },
+      async getDetails() {
+        let result = await GetStore(this.id)
+        let { eastLongitude, northLatitude} = result.data
+
+        this.form.setFieldsValue(result.data)
+        this.mapCenter = [eastLongitude, northLatitude]
+      },
+      clearForm() {
+        this.form.setFieldsValue({
+          storeCode: '',
+          storeName: '',
+          contact: '',
+          commissionRate: '',
+          storeImageUrl: '',
+          address: '',
+          eastLongitude: '',
+          northLatitude: '',
+        })
+      },
+      onConfirm() {
+        this.form.validateFields((err, values) => {
+          this.confirmLoading = true
+          if (!err) {
+            switch(this.type) {
+              case 'PLUS':
+                this.plusStore(values)
+                break;
+              case 'EDIT':
+                this.editStore(values)
+                break;
+            }
+          }
+        });
+      },
+      async plusStore(data) {
+        try {
+          await CreateStore(data)
+
+          this.$emit('close')
+          this.succeed()
+          this.$message.success(this.$t('afterCreateStore'))
+        }
+        catch {
+          // 
+        }
+        this.confirmLoading = false
+      },
+      async editStore(data) {
+        try {
+          await UpdateStore({...data, id: this.id})
+
+          this.$emit('close')
+          this.succeed()
+          this.$message.success(this.$t('afterUpdateStore'))
+        }
+        catch {
+          // 
+        }
+        this.confirmLoading = false
       }
     }
   }

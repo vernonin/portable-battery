@@ -12,6 +12,7 @@ window._AMapSecurityConfig = {
 export default {
   name: 'Map',
   props: {
+    center: { type: Array, default: () => []},
     onClick: { type: Function }
   },
   data() {
@@ -28,7 +29,6 @@ export default {
   },
   mounted() {
     this.initMap()
-   
   },
   methods : {
     initMap() {
@@ -49,7 +49,7 @@ export default {
             viewMode: '2D', 
             zoom:11,
             layers: [layer],
-            center: [116.397428, 39.90923],
+            center: this.center,
             resizeEnable: true
         })
 
@@ -66,15 +66,15 @@ export default {
             left: '10px',
           },
         });
-        this.map.addControl(toolBar);   // 添加右下角的放大缩小
-        this.map.addControl(controlBar);   // 方向盘
-        this.map.addControl(new AMap.MapType());   // 添加右上角的标准图和卫星图  和路况
+        this.map.addControl(toolBar);       // 添加右下角的放大缩小
+        this.map.addControl(controlBar);    // 方向盘
+        this.map.addControl(new AMap.MapType());      // 添加右上角的标准图和卫星图  和路况
         // this.map.addControl(new AMap.HawkEye());   // 添加地图放大镜
 
-        this.addMarker([116.397428, 39.90923])
+        this.addMarker(this.center)
         this.map.on('click', this.showInfoClick)
       }).catch(e => {
-        console.log(e);
+        console.log(e)
       })
     },
     showInfoClick(e) {
@@ -91,7 +91,7 @@ export default {
       this.marker = new this.AMap.Marker({
         icon: "//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png",
         position: position,
-        offset: new this.AMap.Pixel(-13, -30)
+        offset: new this.AMap.Pixel(-24, -58)
       })
       this.marker.setMap(this.map);
     },

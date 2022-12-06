@@ -6,7 +6,7 @@
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
-      :data-source="cabinets"
+      :data-source="stores"
       :loading="tableLoading"
       :pagination="pagination"
       @change="tableChange"
@@ -14,15 +14,11 @@
       <div slot="storeImageUrl" slot-scope="storeImageUrl">
         <a @click="showImage(storeImageUrl)">查看图片</a>
       </div>
-      <div slot="generateQR">
-        
-      </div>
 
       <div slot="status" slot-scope="status">
         <a-badge :status="status ? 'success' : 'default'"/>
         {{status ? '生效' : '失效'}}
       </div>
-    
 
       <div slot="action" slot-scope="cabinet">
         <a @click="onEdit(cabinet)">{{$t('edit')}}</a>
@@ -30,7 +26,7 @@
         <a>{{cabinet.status ? $t('invalid') : $t('valid')}}</a>
       </div>
     </a-table>
-    <EditStore :visible="openEditStore" @close="openEditStore = false" />
+    <EditStore :visible="openEditStore" :type="TYPE" :id="currentStoreId" :succeed="getPageStore" @close="openEditStore = false" />
 
     <viewer :images="storeImageUrl" style="display: none;">
       <img id="viewer" :src="storeImageUrl[0]">
@@ -49,14 +45,13 @@
   const columns = [
     { title: '商户编号', dataIndex: 'storeCode', key: 'storeCode' },
     { title: '商户名称', dataIndex: 'storeName', key: 'storeName' },
-    { title: '联系方式', dataIndex: 'contact	', key: 'contact	', width: 120, align: 'center' },
+    { title: '联系方式', dataIndex: 'contact', key: 'contact', width: 120, align: 'center' },
     { title: '商户地址', dataIndex: 'address', key: 'address', align: 'center' },
     { title: '商户图片', dataIndex: 'storeImageUrl', key: 'storeImageUrl', width: 100, align: 'center', scopedSlots: { customRender: 'storeImageUrl' } },
     { title: '分成比例', dataIndex: 'commissionRate', key: 'commissionRate', width: 100, align: 'center', },
     { title: '状态', dataIndex: 'status', key: 'status', width: 100, align: 'center', scopedSlots: { customRender: 'status' } },
     { title: '操作', dataIndex: '', key: 'active', width: 120, align: 'center', scopedSlots: { customRender: 'action' } },
-  ];
-
+  ]
 
   // 二维数组：第一层代表列，第二层代表每列的Form.Item
   const searchFormData = [
@@ -131,13 +126,14 @@
         columns,
         searchFormData,
         
-        cabinets: [],
+        stores: [],
         selectedRowKeys: [],
         storeImageUrl: [],
         imgs: [],
+        TYPE: 'PLUS',
+        currentStoreId: '',
         openEditStore: false,
         tableLoading: false,
-        currentId: '',
         pagination: {
           total: 0,
           current: 1,
@@ -163,15 +159,16 @@
           let result = await GetStores({...query, ...this.pagination, size: this.pagination.pageSize})
 
           this.pagination.total = result.data.total
-          this.cabinets = result.data.records.map(c => ({...c, key: c.id}))
+          this.stores = result.data.records.map(c => ({...c, key: c.id}))
         }
         catch {
-          this.cabinets = []
+          this.stores = []
         }
         
         this.tableLoading = false
       },
       onPlus() {
+        this.TYPE = 'PLUS'
         this.openEditStore = true
       },
       showImage(url) {
@@ -181,11 +178,10 @@
           document.getElementById('viewer').click()
         }, 100)
       },
-      onGenerateQR(cabinet) {
-        console.log(cabinet);
-      },
-      onEdit(cabinet) {
-        console.log(cabinet)
+      onEdit({ id }) {
+        this.TYPE = 'EDIT'
+        this.currentStoreId = id
+        this.openEditStore = true
       },
     }
   }

@@ -32,14 +32,12 @@
         />
       </div>
 
-      <div slot="action" slot-scope="cabinet">
-        <a @click="onEdit(cabinet)">{{$t('edit')}}</a>
-        <a-divider type="vertical" />
+      <div slot="action" slot-scope="battery">
         <a-popconfirm
           :title="$t('sureDelBattTitle')"
           ok-text="Yes"
           cancel-text="No"
-          @confirm="onDelete(cabinet)"
+          @confirm="onDelete(battery)"
         >
           <a style="color: #FF4D52;">{{$t('delete')}}</a>
         </a-popconfirm>
@@ -65,8 +63,8 @@
     { title: '使用次数', dataIndex: 'useCount', key: 'useCount', width: 80, align: 'center' },
     { title: '状态', dataIndex: 'batteryStatus', key: 'batteryStatus', width: 100, align: 'center', scopedSlots: { customRender: 'batteryStatus' } },
     { title: '当前电量', dataIndex: '', key: 'power', width: 200, scopedSlots: { customRender: 'power' } },
-    { title: '操作', dataIndex: '', key: 'active', width: 120, align: 'center', scopedSlots: { customRender: 'action' } },
-  ];
+    { title: '操作', dataIndex: '', key: 'active', width: 100, align: 'center', scopedSlots: { customRender: 'action' } },
+  ]
 
 
   // 二维数组：第一层代表列，第二层代表每列的Form.Item
@@ -171,11 +169,6 @@
       },
       onPlus() {
         this.TYPE = 'PLUS'
-        this.openEditBattery = true
-      },
-      onEdit({ id }) {
-        this.currentBatteryId = id
-        this.TYPE = 'EDIT'
         this.openEditBattery = true
       },
 
