@@ -84,9 +84,9 @@
         // pass
       },
       handleOk() {
-        this.confirmLoading = true
         this.form.validateFields((err, values) => {
           if (!err) {
+            this.confirmLoading = true
 
             switch(this.type) {
               case 'PLUS':

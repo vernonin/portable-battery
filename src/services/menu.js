@@ -6,7 +6,16 @@ const S_M_URL = '/api/system-server/menu'
  * @returns 
  */
 export function GetMenus(params) {
-	return http.get(`${S_M_URL}/menuPage`, { params })
+  return http.get(`${S_M_URL}/menuPage`, { params })
+}
+
+/**
+ * 根据id查询菜单
+ * @param {*} id 菜单ID 
+ * @returns 
+ */
+export function GetMenu(id) {
+  return http.get(`${S_M_URL}/detail`, { params: { id } })
 }
 
 /**
@@ -15,7 +24,7 @@ export function GetMenus(params) {
  * @returns 
  */
 export function CreateMenu(data) {
-	return http.post(`${S_M_URL}/save`, data)
+  return http.post(`${S_M_URL}/save`, data)
 }
 
 /**
@@ -24,7 +33,7 @@ export function CreateMenu(data) {
  * @returns 
  */
 export function UpdateMenu(data) {
-	return http.post(`${S_M_URL}/update`, data)
+  return http.post(`${S_M_URL}/update`, data)
 }
 
 /**
@@ -32,15 +41,16 @@ export function UpdateMenu(data) {
  * @returns 
  */
 export function GetMenuTree() {
-	return http.get(`${S_M_URL}/getMenuTree`)
+  return http.get(`${S_M_URL}/getMenuTree`)
 }
+
 
 /**
  * 根据父id 查询相关子菜单
  * @returns 
  */
 export function GetMenuByParentId() {
-	return http.get(`${S_M_URL}/getByParentId`)
+  return http.get(`${S_M_URL}/getByParentId`)
 }
 
 /**
@@ -49,5 +59,5 @@ export function GetMenuByParentId() {
  * @returns 
  */
 export function DeleteMenu(id) {
-	return http.post(`${S_M_URL}/delete`, {}, {params: { id }})
+  return http.post(`${S_M_URL}/delete`, {}, {params: { id }})
 }

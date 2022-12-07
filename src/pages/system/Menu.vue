@@ -1,6 +1,6 @@
 <template>
   <div style="background-color: #fff;padding: 12px;">
-    <SearchForm :form-data="searchFormData" />
+    <SearchForm :form-data="searchFormData" :on-search="getPageMenu" />
     <!-- 按钮 -->
     <ButtonBar :btns="barbtns" @plus="onPlus" @batch="onBatch" />
     <SelectAlert :num="selectedRowKeys.length" @clear="clearSelected" />
@@ -9,6 +9,7 @@
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="columns"
       :data-source="menus"
+      :loading="tableLoading"
       :expanded-row-keys.sync="expandedRowKeys"
     >
       <div slot="status" slot-scope="status">
@@ -17,15 +18,15 @@
         {{status ? '生效' : '失效'}}
       </div>
 
-      <div slot="action">
-        <a @click="onEdit">{{$t('edit')}}</a>
+      <div slot="action" slot-scope="menu">
+        <a @click="onEdit(menu.id)">{{$t('edit')}}</a>
         <a-divider type="vertical" />
-        <a @click="onAddSub">{{$t('addSubItem')}}</a>
+        <a @click="onAddSub(menu.id)">{{$t('addSubItem')}}</a>
         <a-divider type="vertical" />
         <a>{{$t('invalid')}}</a>
       </div>
     </a-table>
-    <PlusMenu :visible="openPlusMenu" :type="TYPE" @cancel="openPlusMenu = false" />
+    <PlusMenu :visible="openPlusMenu" :type="TYPE" :id="currentMenuId" :succeed="getPageMenu" @cancel="openPlusMenu = false" />
   </div>
 </template>
 
@@ -43,7 +44,7 @@
       {
         label: 'menuNumber',
         type: 'input',
-        name: 'menuNumber',
+        name: 'code',
         placeholder: '请输入菜单编号'
       },
       {
@@ -103,7 +104,9 @@
         searchFormData,
         
         TYPE: 'PLUS',
+        currentMenuId: '',
         openPlusMenu: false,
+        tableLoading: false,
         menus: [],
         selectedRowKeys: [],
         expandedRowKeys: [],
@@ -122,6 +125,7 @@
         this.selectedRowKeys = selectedRowKeys;
       },
       async getPageMenu(query = {}) {
+        this.tableLoading = true
         try {
           let result = await GetMenus({...query, ...this.pagination, size: this.pagination.pageSize})
 
@@ -134,30 +138,29 @@
           this.menus = []
         }
 
-
+        this.tableLoading = false
       },
       clearSelected() {
         this.selectedRowKeys = [];
       },
       onPlus() {
-        console.log('onPlus');
         this.TYPE = 'PLUS'
-        this.openPlusMenu = true;
+        this.currentMenuId = ''
+        this.openPlusMenu = true
       },
-      onEdit() {
+      onEdit(id) {
         this.TYPE = 'EDIT'
-        this.openPlusMenu = true;
+        this.currentMenuId = id
+        this.openPlusMenu = true
       },
       onBatch() {
-        console.log('onBatch');
+        console.log('onBatch')
       },
-      onAddSub() {
-        this.openPlusMenu = true;
+      onAddSub(id) {
+        this.TYPE = 'PLUS'
+        this.currentMenuId = id
+        this.openPlusMenu = true
       },
     }
   }
 </script>
-
-<style scoped>
-
-</style>

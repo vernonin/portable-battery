@@ -1,8 +1,9 @@
 <template>
   <a-modal
-    :title="$t('createMenu')"
+    :title="type === 'PLUS' ? $t('createMenu') : type === 'EDIT' ? $t('editMenu') : ''"
     width="700px"
     :visible="visible"
+    :confirm-loading="confirmLoading"
     @ok="handleOk"
     @cancel="handleCancel"
   >
@@ -11,28 +12,22 @@
         <a-col :span="12">
           <a-form-item :label="$t('menuNumber')">
             <a-input
-              v-decorator="['menuNumber', { rules: [{ required: true, message: $t('menuNumberpl') }] }]"
+              v-decorator="['code', { rules: [{ required: true, message: $t('menuNumberpl') }] }]"
               :placeholder="$t('menuNumberpl')"
             />
           </a-form-item>
           <a-form-item :label="$t('parentMenu')">
             <treeselect
               :multiple="false"
+              style="height: 32px;"
               :options="parentMenus"
-              placeholder="Select your favourite(s)..."
+              :placeholder="$t('parentMenupl')"
               v-model="parentMenu"
             />
-            <!-- <a-select
-              v-decorator="['parentMenu']"
-              :placeholder="$t('parentMenupl')"
-            >
-              <a-select-option value="male">{{$t('male')}}</a-select-option>
-              <a-select-option value="female">{{$t('female')}}</a-select-option>
-            </a-select> -->
           </a-form-item>
           <a-form-item :label="$t('menuSort')">
             <a-input
-              v-decorator="['menuSort']"
+              v-decorator="['sort']"
               :placeholder="$t('menuSortpl')"
             />
           </a-form-item>
@@ -46,7 +41,7 @@
           </a-form-item>
           <a-form-item :label="$t('routePath')">
             <a-input
-              v-decorator="['routePath']"
+              v-decorator="['path']"
               :placeholder="`${$t('routePathpl')}`"
             />
           </a-form-item>
@@ -60,7 +55,7 @@
 
   import Treeselect from '@riophae/vue-treeselect'
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-  import { GetMenuTree } from '@/services/menu'
+  import { GetMenuTree, GetMenu, CreateMenu, UpdateMenu } from '@/services/menu'
 
   export default {
     name: 'PlusUser',
@@ -68,18 +63,19 @@
     components: { Treeselect },
     props: {
       visible: { type: Boolean, default: false },
-      type: { type: String, default: 'PLUS'}
+      type: { type: String, default: 'PLUS'},
+      id: { type: String, default: ''},
+      succeed: { type: Function }
     },
     data() {
       return {
         newMenu: [],
-        parentMenu: [],
+        parentMenu: null,
         parentMenus: [],
+        confirmLoading: false,
+  
         form: this.$form.createForm(this, { name: 'coordinated' }),
       }
-    },
-    created() {
-      
     },
     watch: {
       visible(newVal) {
@@ -89,33 +85,91 @@
       }
     },
     methods: {
+      async getMenuDetail() {
+        const result = await GetMenu(this.id)
+
+        this.form.setFieldsValue(result.data)
+      },
       async getParentTree() {
         let result = await GetMenuTree()
-        console.log(result.data.records);
-        console.log('f:', this.filterMenu(result.data.records))
-        this.parentMenus = result.data.records.map(m => ({
-          id: m.id,
-          label: m.menuName,
-          children: m.children
-        }))
+        this.parentMenus = this.filterMenu(result.data.records)
+
+        if (this.type === 'EDIT') {
+          this.getMenuDetail()
+        }
+
+        // 如果是添加子项按钮，则回显改项菜单在上级菜单
+        if (this.type === 'PLUS' && this.id !== '') {
+          this.parentMenu = this.id
+        }
       },
       filterMenu(menuTree) {
-        // 
-        return menuTree
+        let newArr = []
+
+        menuTree.forEach(menu => {
+          if (menu.children && menu.children.length > 0) {
+            newArr.push({
+              id: menu.id,
+              label: menu.menuName,
+              children: this.filterMenu(menu.children)
+            })
+          } else {
+            newArr.push({
+              id: menu.id,
+              label: menu.menuName
+            })
+          }
+        })
+
+        return newArr
       },
       handleOk() {
         this.form.validateFields((err, values) => {
           if (!err) {
-            console.info('success:', values);
+            this.confirmLoading = true
+
+            switch(this.type) {
+              case 'PLUS':
+                this.plusMenu({...values, parentId: this.parentMenu || ''})
+                break;
+              case 'EDIT':
+                this.updateMenu({...values, id: this.id, parentId: this.parentMenu || ''})
+                break;
+            }
           }
         });
       },
       handleCancel() {
         this.$emit('cancel')
       },
+      async plusMenu(data) {
+        try {
+          await CreateMenu(data)
+
+          this.succeed()
+          this.$emit('cancel')
+          this.$message.success(this.$t('afterCreateMenu'))
+        }
+        catch {
+          // 
+        }
+
+        this.confirmLoading = false
+      },
+      async updateMenu(data) {
+        try {
+          await UpdateMenu(data)
+
+          this.succeed()
+          this.$emit('cancel')
+          this.$message.success(this.$t('afterUpdateMenu'))
+        }
+        catch {
+          // 
+        }
+
+        this.confirmLoading = false
+      }
     }
   }
 </script>
-
-<style scoped>
-</style>
