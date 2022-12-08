@@ -1,87 +1,50 @@
 <template>
-  <common-layout>
-    <div class="top">
-      <div class="header">
-        <img alt="logo" class="logo" src="@/assets/img/logo.png" />
-        <span class="title">{{systemName}}</span>
-      </div>
+  <div class="login-container">
+    <div class="left-bg">
+      <img src="../../assets/img/login-left.png">
     </div>
-    <div class="login">
-      <a-form @submit="onSubmit" :form="form">
-        <a-tabs size="large" :tabBarStyle="{textAlign: 'center'}" style="padding: 0 2px;">
-          <a-tab-pane tab="账户密码登录" key="1">
-            <a-form-item>
-              <a-input
-                autocomplete="autocomplete"
-                size="large"
-                placeholder="admin"
-                v-decorator="['userAccount', {rules: [{ required: true, message: '请输入账户名', whitespace: true}]}]"
-              >
-                <a-icon slot="prefix" type="user" />
-              </a-input>
-            </a-form-item>
-            <a-form-item>
-              <a-input
-                size="large"
-                placeholder="888888"
-                autocomplete="autocomplete"
-                type="password"
-                v-decorator="['userPassword', {rules: [{ required: true, message: '请输入密码', whitespace: true}]}]"
-              >
-                <a-icon slot="prefix" type="lock" />
-              </a-input>
-            </a-form-item>
-          </a-tab-pane>
-          <a-tab-pane tab="手机号登录" key="2">
-            <a-form-item>
-              <a-input size="large" placeholder="mobile number" >
-                <a-icon slot="prefix" type="mobile" />
-              </a-input>
-            </a-form-item>
-            <a-form-item>
-              <a-row :gutter="8" style="margin: 0 -4px">
-                <a-col :span="16">
-                  <a-input size="large" placeholder="captcha">
-                    <a-icon slot="prefix" type="mail" />
-                  </a-input>
-                </a-col>
-                <a-col :span="8" style="padding-left: 4px">
-                  <a-button style="width: 100%" class="captcha-button" size="large">获取验证码</a-button>
-                </a-col>
-              </a-row>
-            </a-form-item>
-          </a-tab-pane>
-        </a-tabs>
-        <div>
-          <a-checkbox :checked="true" >自动登录</a-checkbox>
-          <a style="float: right">忘记密码</a>
-        </div>
+  
+    <div class="right-form">
+      <a-form class="login-form" @submit="onSubmit" :form="form">
+        <h1>万笙充电管理系统</h1>
+        <p class="subtitle">winson charge management system</p>
+        <div class="welcome">欢迎登录</div>
         <a-form-item>
-          <a-button :loading="logging" style="width: 100%;margin-top: 24px" size="large" htmlType="submit" type="primary">登录</a-button>
+          <a-input
+            autocomplete="autocomplete"
+            size="large"
+            placeholder="请输入账号"
+            v-decorator="['userAccount', {rules: [{ required: true, message: '请输入账户名', whitespace: true}]}]"
+          >
+            <a-icon slot="prefix" type="user" />
+          </a-input>
         </a-form-item>
-        <div>
-          其他登录方式
-          <a-icon class="icon" type="alipay-circle" />
-          <a-icon class="icon" type="taobao-circle" />
-          <a-icon class="icon" type="weibo-circle" />
-          <router-link style="float: right" to="/dashboard/analysis" >注册账户</router-link>
-        </div>
+        <a-form-item>
+          <a-input
+            size="large"
+            placeholder="请输入密码"
+            autocomplete="autocomplete"
+            type="password"
+            v-decorator="['userPassword', {rules: [{ required: true, message: '请输入密码', whitespace: true}]}]"
+          >
+            <a-icon slot="prefix" type="lock" />
+          </a-input>
+        </a-form-item>
+        <a-form-item>
+          <a-button :loading="logging" style="width: 100%;margin-top: 12px;" size="large" htmlType="submit" type="primary">登录</a-button>
+        </a-form-item>
       </a-form>
     </div>
-  </common-layout>
+  </div>
 </template>
 
 <script>
-import CommonLayout from '@/layouts/CommonLayout'
-import {login} from '@/services/user'
-// import {setAuthorization} from '@/utils/request'
+import { login } from '@/services/user'
 import { SET_AUTH } from '@/utils/auth'
-// import {loadRoutes} from '@/utils/routerUtil'
-import {mapMutations} from 'vuex'
+import { mapMutations } from 'vuex'
 
 export default {
   name: 'Login',
-  components: {CommonLayout},
   data () {
     return {
       logging: false,
@@ -107,12 +70,8 @@ export default {
             const userPassword = this.form.getFieldValue('userPassword')
             let result = await login(userAccount, userPassword)
 
-            if (result.code === 200) {
-              this.afterLogin(result.data)
-              this.$message.success('登录成功！');
-            } else {
-              this.$message.error(result.msg);
-            }
+            this.afterLogin(result.data)
+            this.$message.success('登录成功！')
           } catch (err){
             // pass
           }
@@ -142,59 +101,70 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .common-layout{
-    .top {
-      text-align: center;
-      .header {
-        height: 44px;
-        line-height: 44px;
-        a {
-          text-decoration: none;
-        }
-        .logo {
-          height: 44px;
-          vertical-align: top;
-          margin-right: 16px;
-        }
-        .title {
-          font-size: 33px;
-          color: @title-color;
-          font-family: 'Myriad Pro', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-          font-weight: 600;
-          position: relative;
-          top: 2px;
-        }
-      }
-      .desc {
-        font-size: 14px;
-        color: @text-color-second;
-        margin-top: 12px;
-        margin-bottom: 40px;
+  .login-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background-color: #f7f7f7;
+
+    .left-bg {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      
+      img {
+        width: 500px;
       }
     }
-    .login{
-      width: 368px;
-      margin: 0 auto;
-      @media screen and (max-width: 576px) {
-        width: 95%;
-      }
-      @media screen and (max-width: 320px) {
-        .captcha-button{
-          font-size: 14px;
-        }
-      }
-      .icon {
-        font-size: 24px;
-        color: @text-color-second;
-        margin-left: 16px;
-        vertical-align: middle;
-        cursor: pointer;
-        transition: color 0.3s;
 
-        &:hover {
-          color: @primary-color;
+    .right-form {
+      flex: 1;
+      .login-form {
+        position: relative;
+        width: 420px;
+        margin: 0 auto;
+        margin-top: 24vh;
+        padding: 24px 30px;
+        background-color: #fff;
+        border-radius: 6px;
+        box-shadow: 4px 4px 8px #cacaca;
+        overflow: hidden;
+
+        .subtitle {
+          font-size: 16px;
+          color: #3A62D7;
+          font-weight: bold;
+          text-transform: uppercase;
+        }
+
+        .welcome {
+          position: absolute;
+          top: 18px;
+          right: -20px;
+          color: #666;
+          font-size: 12px;
+          transform: rotate(45deg);
+          padding: 1px 20px;
+          box-sizing: border-box;
+          letter-spacing: 2px;
+          background-color: antiquewhite;
+        }
+        .icon {
+          font-size: 24px;
+          color: @text-color-second;
+          margin-left: 16px;
+          vertical-align: middle;
+          cursor: pointer;
+          transition: color 0.3s;
+
+          &:hover {
+            color: @primary-color;
+          }
         }
       }
     }
   }
+  
 </style>
