@@ -11,6 +11,7 @@
       :data-source="menus"
       :loading="tableLoading"
       :expanded-row-keys.sync="expandedRowKeys"
+      @expandedRowsChange="rowsChange"
     >
       <div slot="status" slot-scope="status">
         <a-badge status="success" v-if="status"/>
@@ -84,11 +85,11 @@
   ]
 
   const columns = [
-    { title: '菜单编号', dataIndex: 'code', key: 'code', width: 150  },
-    { title: '菜单名称', dataIndex: 'menuName', key: 'menuName', width: 150 },
-    { title: '菜单图标', dataIndex: 'mneuIcon', key: 'mneuIcon' },
+    { title: '菜单编号', dataIndex: 'code', key: 'code'  },
+    { title: '菜单名称', dataIndex: 'menuName', key: 'menuName', width: 120 },
+    { title: '菜单图标', dataIndex: 'mneuIcon', key: 'mneuIcon', width: 100 },
     { title: '路由地址', dataIndex: 'path', key: 'path' },
-    { title: '菜单排序', dataIndex: 'sort', key: 'sort', align: 'center' },
+    { title: '菜单排序', dataIndex: 'sort', key: 'sort', align: 'center', width: 100 },
     { title: '状态', dataIndex: 'status', key: 'status', width: 120, align: 'center', scopedSlots: { customRender: 'status' } },
     { title: '操作', dataIndex: '', key: 'active', width: 200, align: 'center', scopedSlots: { customRender: 'action' } },
   ];
@@ -124,6 +125,9 @@
       onSelectChange(selectedRowKeys) {
         this.selectedRowKeys = selectedRowKeys;
       },
+      rowsChange(keys) {
+        this.expandedRowKeys = keys
+      },
       async getPageMenu(query = {}) {
         this.tableLoading = true
         try {
@@ -131,7 +135,7 @@
 
           if (result.code === 200) {
             this.pagination.total = result.data.total
-            this.menus = result.data.records.map(m => ({...m, key: m.id}))
+            this.menus = this.addKeyToMenus(result.data.records)
           }
         }
         catch {
@@ -139,6 +143,27 @@
         }
 
         this.tableLoading = false
+      },
+      addKeyToMenus(data) {
+        let newArr = []
+
+        data.forEach(menu => {
+          if (menu.children && menu.children.length > 0) {
+            newArr.push({
+              ...menu,
+              key: menu.id,
+              children: this.addKeyToMenus(menu.children)
+            })
+          } else {
+            delete menu.children
+            newArr.push({
+              ...menu,
+              key: menu.id
+            })
+          }
+        })
+
+        return newArr
       },
       clearSelected() {
         this.selectedRowKeys = [];

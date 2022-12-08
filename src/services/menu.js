@@ -6,7 +6,7 @@ const S_M_URL = '/api/system-server/menu'
  * @returns 
  */
 export function GetMenus(params) {
-  return http.get(`${S_M_URL}/menuPage`, { params })
+  return http.get(`${S_M_URL}/getMenuTree`, { params })
 }
 
 /**

@@ -3,6 +3,7 @@
     :title="type === 'PLUS' ? $t('createRole') : $t('editRole')"
     width="700px"
     :visible="visible"
+    :confirm-loading="confirmLoading"
     @ok="handleOk"
     @cancel="handleCancel"
   >
@@ -42,13 +43,18 @@
     },
     data() {
       return {
+        confirmLoading: false,
         form: this.$form.createForm(this, { name: 'coordinated' }),
       }
     },
     watch: {
       visible(newVal) {
-        if (newVal && this.type === 'EDIT') {
-          this.getRoleInfo()
+        if (newVal) {
+          if (this.type === 'EDIT') {
+            this.getRoleInfo()
+          } else {
+            this.clearForm()
+          }
         }
       }
     },
@@ -56,7 +62,7 @@
       handleOk() {
         this.form.validateFields((err, values) => {
           if (!err) {
-            console.info('success:',this.type, values);
+            this.confirmLoading = true
 
             switch(this.type) {
               case 'PLUS':
@@ -71,18 +77,30 @@
         });
       },
       async plusRole(data) {
-        await CreateRole(data)
+        try {
+          await CreateRole(data)
 
-        this.$emit('cancel')
-        this.succeed()
-        this.$message.success(this.$t('afterCreateRole'))
+          this.$emit('cancel')
+          this.succeed()
+          this.$message.success(this.$t('afterCreateRole'))
+        }
+        catch {
+          // 
+        }
+        this.confirmLoading = false
       },
       async EditRole(data) {
-        await UpdateRole({...data, id: this.roleId})
+        try {
+          await UpdateRole({...data, id: this.roleId})
 
-        this.$emit('cancel')
-        this.succeed()
-        this.$message.success(this.$t('afterEditeRole'))
+          this.$emit('cancel')
+          this.succeed()
+          this.$message.success(this.$t('afterEditeRole'))
+        }
+        catch {
+          // 
+        }
+        this.confirmLoading = false
       },
       handleCancel() {
         this.$emit('cancel')
@@ -93,6 +111,12 @@
         const { roleCode, roleName } = result.data
         this.form.setFieldsValue({ roleCode, roleName })
       },
+      clearForm() {
+        this.form.setFieldsValue({
+          roleCode: '',
+          roleName: ''
+        })
+      }
     }
   }
 </script>

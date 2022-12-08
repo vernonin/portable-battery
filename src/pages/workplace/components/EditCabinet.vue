@@ -96,8 +96,8 @@
                 this.editCabinet(values)
                 break;
             }
-
           }
+          this.confirmLoading = false
         });
       },
       async getQueryStores() {
@@ -116,24 +116,34 @@
         }
       },
       async plusCabinet(data) {
-        const { id } = this.stores.find(s => s.storeName === data.storeName)
+        try {
+          const { id } = this.stores.find(s => s.storeName === data.storeName)
 
-        await CreateCabinet({storeId: id, chassisNumber: data.chassisNumber})
+          await CreateCabinet({storeId: id, chassisNumber: data.chassisNumber})
 
-        this.$emit('cancel')
-        this.succeed()
-        this.$message.success(this.$t('afterCreateCabinet'))
+          this.$emit('cancel')
+          this.succeed()
+          this.$message.success(this.$t('afterCreateCabinet'))
+        }
+        catch {
+          // 
+        }
 
         this.confirmLoading = false
       },
       async editCabinet(data) {
-        const { id } = this.stores.find(s => s.storeName === data.storeName)
+        try {
+          const { id } = this.stores.find(s => s.storeName === data.storeName)
         
-        await UpdateCabinet({storeId: id, id: this.cabinetId})
+          await UpdateCabinet({storeId: id, id: this.cabinetId})
 
-        this.$emit('cancel')
-        this.succeed()
-        this.$message.success(this.$t('afterEditCabinet'))
+          this.$emit('cancel')
+          this.succeed()
+          this.$message.success(this.$t('afterEditCabinet'))
+        }
+        catch {
+          // 
+        }
 
         this.confirmLoading = false
       },

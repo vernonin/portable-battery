@@ -13,7 +13,7 @@
       <a-button icon="setting" @click="handleResetPsw">
         {{$t('resetPsw')}}
       </a-button>
-      <a-button key="submit" type="primary" @click="handleOk">
+      <a-button key="submit" :loading="confirmLoading" type="primary" @click="handleOk">
         {{$t('confirm')}}
       </a-button>
     </template>
@@ -89,6 +89,7 @@
     data() {
       return {
         openResetPwd: false,
+        confirmLoading: false,
         form: this.$form.createForm(this, { name: 'coordinated' }),
       }
     },
@@ -103,14 +104,23 @@
       handleOk() {
         this.form.validateFields(async (err, values) => {
           if (!err) {
-            let { userSex } = values
-            userSex = userSex === 'male' ? true : userSex === 'female' ? false : null
+            this.confirmLoading = true
 
-            await UpdateUser({...values, userSex, id: this.userId})
+            try {
+              let { userSex } = values
+              userSex = userSex === 'male' ? true : userSex === 'female' ? false : null
 
-            this.$emit('cancel')
-            this.created()
-            this.$message.success(this.$t('afterEditUser'))
+              await UpdateUser({...values, userSex, id: this.userId})
+
+              this.$emit('cancel')
+              this.created()
+              this.$message.success(this.$t('afterEditUser'))
+            }
+            catch {
+              // 
+            }
+
+            this.confirmLoading = false
           }
         });
       },

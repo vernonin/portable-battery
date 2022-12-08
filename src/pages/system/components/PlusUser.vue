@@ -3,6 +3,7 @@
     :title="$t('plusUserTitle')"
     width="700px"
     :visible="visible"
+    :confirm-loading="confirmLoading"
     @ok="handleOk"
     @cancel="handleCancel"
   >
@@ -70,29 +71,55 @@
     },
     data() {
       return {
+        confirmLoading: false,
         form: this.$form.createForm(this, { name: 'coordinated' }),
+      }
+    },
+    watch: {
+      visible(newVal) {
+        if (newVal) {
+          this.clearForm()
+        }
       }
     },
     methods: {
       handleOk() {
         this.form.validateFields(async (err, values) => {
           if (!err) {
-            let { userSex, userPassword } = values
+            this.confirmLoading = true
+            try {
+              let { userSex, userPassword } = values
 
-            userSex = userSex === 'male' ? true : userSex === 'female' ? false : null
-            userPassword = userPassword ? userPassword : '123456'
+              userSex = userSex === 'male' ? true : userSex === 'female' ? false : null
+              userPassword = userPassword ? userPassword : '123456'
 
-            await CreateUser({...values, userSex, userPassword})
+              await CreateUser({...values, userSex, userPassword})
 
-            this.$message.success(this.$t('afterCreateUser'));
-            this.$emit('cancel');
-            this.created();
+              this.$message.success(this.$t('afterCreateUser'))
+              this.$emit('cancel')
+              this.created()
+            }
+            catch {
+              // 
+            }
+            this.confirmLoading = false
+            
           }
         });
       },
       handleCancel() {
         this.$emit('cancel');
       },
+      clearForm() {
+        this.form.setFieldsValue({
+          userAccount: '',
+          userName: '',
+          userPhone: '',
+          userPassword: '',
+          userSex: '',
+          userEmail: ''
+        })
+      }
     }
   }
 </script>

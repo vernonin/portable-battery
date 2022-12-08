@@ -221,6 +221,8 @@
                 break;
             }
           }
+
+          this.confirmLoading = false
         });
       },
       async plusStore(data) {

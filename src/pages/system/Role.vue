@@ -144,7 +144,12 @@
         }
         this.tableLoading = false
       },
-      async changeStatus({ id }) {
+      async changeStatus({ id, roleCode }) {
+        if (roleCode === 'admin') {
+          this.$message.warning('超级管理员不可失效！')
+          return
+        }
+
         this.$message.loading({ content: this.$t('updatingStatus'), key: updateStatusKey });
 
         try {
@@ -165,7 +170,6 @@
         this.selectedRowKeys = [];
       },
       onPlus() {
-        console.log('onPlus');
         this.TYPE = 'PLUS'
         this.openEditRole = true;
       },
