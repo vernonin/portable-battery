@@ -74,7 +74,7 @@
         label: 'batteryNumber',
         type: 'input',
         name: 'batteryNumber',
-        placeholder: '请输入'
+        placeholder: 'batteryNumberpl'
       }
     ],
     [
@@ -82,11 +82,11 @@
         label: 'status',
         type: 'select',
         name: 'batteryStatus',
-        placeholder: '请选择状态',
+        placeholder: 'statuspl',
         options: [
-          { label: '使用中', value: 'IN_USE' },
-          { label: '已出售', value: 'SOLD' },
-          { label: '空闲', value: 'FREE' }
+          { label: 'IN_USE', value: 'IN_USE' },
+          { label: 'SOLD', value: 'SOLD' },
+          { label: 'FREE', value: 'FREE' }
         ]
       }
     ]

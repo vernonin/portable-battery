@@ -87,7 +87,11 @@
     methods: {
       async getMenuDetail() {
         const result = await GetMenu(this.id)
+        const parnetId = result.data.parentIds
 
+        if (parnetId) {
+          this.parentMenu = parnetId
+        }
         this.form.setFieldsValue(result.data)
       },
       async getParentTree() {

@@ -25,7 +25,7 @@ module.exports = {
       add: '添加'
     },
     US: {
-      plus: 'Plus',
+      plus: 'Create',
       batchActive: 'BatchActive',
       import: 'Import',
       export: 'Export',

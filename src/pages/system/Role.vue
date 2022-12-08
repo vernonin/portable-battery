@@ -49,13 +49,13 @@
         label: 'roleCode',
         type: 'input',
         name: 'roleCode',
-        placeholder: '请输入角色编号'
+        placeholder: 'roleCodepl'
       },
       {
         label: 'roleName',
         type: 'input',
         name: 'roleName',
-        placeholder: '请输入角色名称'
+        placeholder: 'roleNamepl'
       }
     ],
     [
@@ -63,10 +63,10 @@
         label: 'status',
         type: 'select',
         name: 'status',
-        placeholder: '请选择状态',
+        placeholder: 'statuspl',
         options: [
-          { label: '生效', value: 'valid' },
-          { label: '失效', value: 'invalid' }
+          { label: 'valid', value: 'valid' },
+          { label: 'invalid', value: 'invalid' }
         ]
       }
     ]

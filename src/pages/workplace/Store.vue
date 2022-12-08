@@ -60,13 +60,13 @@
         label: 'storeCode',
         type: 'input',
         name: 'storeCode',
-        placeholder: '请输入'
+        placeholder: 'storeCodepl'
       },
       {
         label: 'contact',
         type: 'input',
         name: 'contact',
-        placeholder: '请输入'
+        placeholder: 'contactpl'
       }
     ],
     [
@@ -74,16 +74,16 @@
         label: 'storeName',
         type: 'input',
         name: 'storeName',
-        placeholder: '请输入'
+        placeholder: 'storeNamepl'
       },
       {
         label: 'status',
         type: 'select',
         name: 'status',
-        placeholder: '请选择状态',
+        placeholder: 'statuspl',
         options: [
-          { label: '生效', value: 'valid' },
-          { label: '失效', value: 'invalid' }
+          { label: 'valid', value: 'valid' },
+          { label: 'invalid', value: 'invalid' }
         ]
       }
     ]

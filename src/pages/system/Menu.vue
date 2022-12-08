@@ -46,13 +46,13 @@
         label: 'menuNumber',
         type: 'input',
         name: 'code',
-        placeholder: '请输入菜单编号'
+        placeholder: 'menuNumberpl'
       },
       {
         label: 'menuName',
         type: 'input',
         name: 'menuName',
-        placeholder: '请输入菜单名称'
+        placeholder: 'menuNamepl'
       }
     ],
     [
@@ -60,10 +60,10 @@
         label: 'status',
         type: 'select',
         name: 'status',
-        placeholder: '请选择状态',
+        placeholder: 'statuspl',
         options: [
-          { label: '生效', value: 'valid' },
-          { label: '失效', value: 'invalid' }
+          { label: 'valid', value: 'valid' },
+          { label: 'invalid', value: 'invalid' }
         ]
       }
     ]

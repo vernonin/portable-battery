@@ -53,13 +53,13 @@
         label: 'userAccount',
         type: 'input',
         name: 'userAccount',
-        placeholder: '请输入用户名'
+        placeholder: 'userAccountpl'
       },
       {
         label: 'userName',
         type: 'input',
         name: 'userName',
-        placeholder: '请输入姓名'
+        placeholder: 'userNamepl'
       }
     ],
     [
@@ -67,20 +67,20 @@
         label: 'status',
         type: 'select',
         name: 'status',
-        placeholder: '请选择状态',
+        placeholder: 'statuspl',
         options: [
-          { label: '生效', value: 'valid' },
-          { label: '失效', value: 'invalid' }
+          { label: 'valid', value: 'valid' },
+          { label: 'invalid', value: 'invalid' }
         ]
       },
       {
         label: 'gender',
         type: 'select',
         name: 'userSex',
-        placeholder: '请选择性别',
+        placeholder: 'genderpl',
         options: [
-          { label: '男', value: 'male' },
-          { label: '女', value: 'female' }
+          { label: 'male', value: 'male' },
+          { label: 'female', value: 'female' }
         ]
       }
     ]

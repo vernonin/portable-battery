@@ -68,13 +68,13 @@
         label: 'chassisNumber',
         type: 'input',
         name: 'chassisNumber',
-        placeholder: '请输入'
+        placeholder: 'chassisNumberpl'
       },
       {
         label: 'merchant',
         type: 'input',
         name: 'storeName',
-        placeholder: '请输入'
+        placeholder: 'merchantpl'
       }
     ],
     [
@@ -82,10 +82,10 @@
         label: 'status',
         type: 'select',
         name: 'chassisStatus',
-        placeholder: '请选择状态',
+        placeholder: 'statuspl',
         options: [
-          { label: '在线', value: 'ONLINE' },
-          { label: '离线', value: 'OFF_LINE' }
+          { label: 'ONLINE', value: 'ONLINE' },
+          { label: 'OFF_LINE', value: 'OFF_LINE' }
         ]
       }
     ]

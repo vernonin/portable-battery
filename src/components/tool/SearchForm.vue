@@ -4,14 +4,14 @@
       <a-row>
         <a-col :span="8" :key="index" v-for="(r, index) in formData">
           <a-form-item :label="$t(item.label)" :key="item.name" v-for="item in r">
-            <a-input v-if="item.type === 'input'" v-decorator="[item.name]" :placeholder="item.placeholder" />
+            <a-input v-if="item.type === 'input'" v-decorator="[item.name]" :placeholder="$t(item.placeholder)" />
 
             <a-select
               v-if="item.type === 'select'"
               v-decorator="[item.name]"
-              :placeholder="item.placeholder"
+              :placeholder="$t(item.placeholder)"
             >
-              <a-select-option :key="s.value" v-for="s in item.options" :value="s.value">{{s.label}}</a-select-option>
+              <a-select-option :key="s.value" v-for="s in item.options" :value="s.value">{{$t(s.label)}}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
@@ -40,7 +40,7 @@
       messages: {
         CN: {...systemI18n.messages.CN, ...workplaceI18n.messages.CN },
         HK: {...systemI18n.messages.HK, ...workplaceI18n.messages.HK },
-        US: {...systemI18n.messages.US, ...workplaceI18n.messages.CN },
+        US: {...systemI18n.messages.US, ...workplaceI18n.messages.US },
       }
     },
     props: {
