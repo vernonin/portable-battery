@@ -176,6 +176,11 @@ const options = {
               path: 'battery',
               name: '充电宝管理',
               component: () => import('@/pages/workplace/Battery')
+            },
+            {
+              path: 'order',
+              name: '订单管理',
+              component: () => import('@/pages/workplace/Order')
             }
           ]
         },

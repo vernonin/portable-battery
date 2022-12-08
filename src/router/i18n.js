@@ -56,6 +56,7 @@ module.exports = {
         store: {name: '商戶管理'},
         cabinet: {name: '機櫃管理'},
         battery: {name: '充電寶管理'},
+        order: {name: '訂單管理'},
       },
       system: {
         name: '系統管理',

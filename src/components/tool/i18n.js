@@ -26,7 +26,7 @@ module.exports = {
     },
     US: {
       plus: 'Create',
-      batchActive: 'BatchActive',
+      batchActive: 'Batch active',
       import: 'Import',
       export: 'Export',
       search: 'Search',

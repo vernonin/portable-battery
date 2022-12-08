@@ -1,8 +1,8 @@
 <template>
   <div>
-    <a-form :form="form" :label-col="{ span: 5 }" :wrapper-col="{ span: 16 }" @submit="handleSubmit">
+    <a-form :form="form" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" @submit="handleSubmit">
       <a-row>
-        <a-col :span="8" :key="index" v-for="(r, index) in formData">
+        <a-col :span="9" :key="index" v-for="(r, index) in formData">
           <a-form-item :label="$t(item.label)" :key="item.name" v-for="item in r">
             <a-input v-if="item.type === 'input'" v-decorator="[item.name]" :placeholder="$t(item.placeholder)" />
 
@@ -16,15 +16,13 @@
           </a-form-item>
         </a-col>
 
-        <a-col :span="8">
-          <a-form-item>
-            <a-button type="primary" html-type="submit">
-              {{$t('search')}}
-            </a-button>
-            <a-button style="margin-left: 8px;" @click="handleReset">
-              {{$t('reset')}}
-            </a-button>
-          </a-form-item>
+        <a-col :span="6" style="text-align: right;">
+          <a-button type="primary" html-type="submit">
+            {{$t('search')}}
+          </a-button>
+          <a-button style="margin-left: 8px;" @click="handleReset">
+            {{$t('reset')}}
+          </a-button>
         </a-col>
       </a-row>
     </a-form>
