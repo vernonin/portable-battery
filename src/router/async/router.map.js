@@ -41,14 +41,6 @@ const routerMap = {
     icon: 'check-circle-o',
     component: view.page
   },
-  success: {
-    name: '成功',
-    component: () => import('@/pages/result/Success')
-  },
-  error: {
-    name: '失败',
-    component: () => import('@/pages/result/Error')
-  },
   exception: {
     name: '异常页',
     icon: 'warning',
