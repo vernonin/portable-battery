@@ -36,16 +36,6 @@ const routerMap = {
     icon: 'profile',
     component: view.blank
   },
-  basicDetails: {
-    path: 'basic',
-    name: '基础详情页',
-    component: () => import('@/pages/detail/BasicDetail')
-  },
-  advanceDetails: {
-    path: 'advance',
-    name: '高级详情页',
-    component: () => import('@/pages/detail/AdvancedDetail')
-  },
   result: {
     name: '结果页',
     icon: 'check-circle-o',

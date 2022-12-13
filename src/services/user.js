@@ -1,5 +1,4 @@
-import {ROUTES} from '@/services/api'
-import {request, METHOD, removeAuthorization} from '@/utils/request'
+import { removeAuthorization } from '@/utils/request'
 import http from '@/utils/http'
 
 const A_A_URL = '/api/auth-server/auth'
@@ -18,10 +17,6 @@ export async function login(userAccount, userPassword) {
   })
 }
 
-export async function getRoutesConfig() {
-  return request(ROUTES, METHOD.GET)
-}
-
 /**
  * 退出登录
  */
@@ -30,11 +25,6 @@ export function logout() {
   localStorage.removeItem(process.env.VUE_APP_PERMISSIONS_KEY)
   localStorage.removeItem(process.env.VUE_APP_ROLES_KEY)
   removeAuthorization()
-}
-export default {
-  login,
-  logout,
-  getRoutesConfig
 }
 
 /**
