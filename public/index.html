@@ -10,13 +10,80 @@
     <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.css) { %>
       <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" />
     <% } %>
+    <style>
+      .screen {
+        width: 98vw;
+        height: 97vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+      .loading-container{
+          position:relative;
+          width: 32px;
+          height: 32px;
+          overflow: hidden;
+          transform: rotate(45deg);
+          animation: preloader 1.2s infinite linear;
+        }
+        .loading-container i{
+          width: 12px;
+          height: 12px;
+          position:absolute;
+          background:#1890ff;
+          border-radius: 100%;
+          display:block;
+          transform-origin: 50% 50%;
+          opacity: .3;
+          animation: preloader_i 1.2s infinite linear;
+        }
+        .loading-container i:nth-child(1){
+          top: 0;
+          left: 0;
+        }
+      .loading-container i:nth-child(2){
+          top: 0;
+          right: 0;
+          animation-delay: 0.4s;
+        }
+        .loading-container i:nth-child(3){
+          right: 0;
+          bottom: 0;
+          animation-delay: 0.8s;
+        }
+        .loading-container i:nth-child(4){
+          bottom: 0;
+          left: 0;
+          animation-delay: 1.2s;
+        }
+        @keyframes preloader {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes preloader_i {
+          0% { opacity: .3; }
+          50% {  opacity: 1; }
+          100% { opacity: .3; }
+        }
+
+    </style>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="popContainer" class="beauty-scroll" style="height: 100vh; overflow-y: scroll">
-      <div id="app"></div>
+      <div id="app">
+        <div class="screen">
+          <div class="loading-container">
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- require cdn assets js -->
     <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
