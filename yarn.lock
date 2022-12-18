@@ -5422,11 +5422,6 @@
   "resolved" "https://registry.npm.taobao.org/hex-color-regex/download/hex-color-regex-1.1.0.tgz"
   "version" "1.1.0"
 
-"highlight.js@^10.2.1":
-  "integrity" "sha1-CXhP4ulWEqu+/VEJSJRdT+b6lmg="
-  "resolved" "https://registry.npm.taobao.org/highlight.js/download/highlight.js-10.2.1.tgz"
-  "version" "10.2.1"
-
 "highlight.js@^9.6.0":
   "integrity" "sha1-7SGqAB/mJSuxCj121HVzxlOf4Tw="
   "resolved" "https://registry.npm.taobao.org/highlight.js/download/highlight.js-9.18.1.tgz"
@@ -9239,11 +9234,6 @@
   dependencies:
     "is-plain-obj" "^1.0.0"
 
-"sortablejs@^1.10.1":
-  "integrity" "sha1-bkA2TZE/mLhaFPZnj5K1wSIfUpA="
-  "resolved" "https://registry.npm.taobao.org/sortablejs/download/sortablejs-1.10.2.tgz"
-  "version" "1.10.2"
-
 "source-list-map@^2.0.0":
   "integrity" "sha1-OZO9hzv8SEecyp6jpUeDXHwVSzQ="
   "resolved" "https://registry.npm.taobao.org/source-list-map/download/source-list-map-2.0.1.tgz"
@@ -10496,13 +10486,6 @@
   "integrity" "sha1-dllNh31LEiNEBuhONSdcbVFBJcU="
   "resolved" "https://registry.npm.taobao.org/vue/download/vue-2.6.11.tgz?cache=0&sync_timestamp=1592000011428&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue%2Fdownload%2Fvue-2.6.11.tgz"
   "version" "2.6.11"
-
-"vuedraggable@^2.23.2":
-  "integrity" "sha1-DZXX/fTwL1Z1Wiazydylx8qc+nI="
-  "resolved" "https://registry.npm.taobao.org/vuedraggable/download/vuedraggable-2.23.2.tgz"
-  "version" "2.23.2"
-  dependencies:
-    "sortablejs" "^1.10.1"
 
 "vuepress-html-webpack-plugin@^3.2.0":
   "integrity" "sha1-IZvicq1RD6qHUNLU5w/QKL/RwW4="
