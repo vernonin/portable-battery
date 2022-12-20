@@ -77,6 +77,7 @@
                 name="img"
                 action="/api/system-server/upload/upload"
                 list-type="picture"
+                :file-list="storeimgList"
               >
                 <a-button :block="true" style="width: 100%;"> <a-icon type="upload" />{{$t('clickUpload')}}</a-button>
               </a-upload>
@@ -155,8 +156,9 @@
         header: {
           Authorization: 'Bearer ' + GET_AUTH(),
         },
-        mapCenter: [113.350658, 23.129519],
+        storeimgList: [],
         confirmLoading: false,
+        mapCenter: [113.350658, 23.129519],
         form: this.$form.createForm(this),
       }
     },
@@ -166,6 +168,8 @@
           this.clearForm()
           if (this.type === 'EDIT') {
             this.getDetails()
+          } else {
+            this.onMap(this.mapCenter)
           }
         }
       }
@@ -184,29 +188,65 @@
         return e && e.fileList[0].response?.data
       },
       onMap(position) {
-        this.form.setFieldsValue({
-          eastLongitude: position[0],
-          northLatitude: position[1]
+        this.$nextTick(() => {
+          this.form.setFieldsValue({
+            eastLongitude: position[0],
+            northLatitude: position[1]
+          })
         })
       },
       async getDetails() {
         let result = await GetStore(this.id)
-        let { eastLongitude, northLatitude} = result.data
+        let {
+          storeCode,
+          storeName,
+          contact,
+          commissionRate,
+          address,
+          storeImageUrl,
+          eastLongitude,
+          northLatitude
+        } = result.data
 
-        this.form.setFieldsValue(result.data)
+        this.$nextTick(() => {
+          this.form.setFieldsValue({
+            storeCode,
+            storeName,
+            contact,
+            storeImageUrl,
+            commissionRate,
+            address,
+            eastLongitude,
+            northLatitude
+          })
+        })
+
+        if (storeImageUrl) {
+          this.storeimgList = [{
+            uid: '-1',
+            name: 'store.png',
+            status: 'done',
+            url: storeImageUrl,
+            thumbUrl: storeImageUrl
+          }]
+        }
         this.mapCenter = [eastLongitude, northLatitude]
       },
       clearForm() {
-        this.form.setFieldsValue({
-          storeCode: '',
-          storeName: '',
-          contact: '',
-          commissionRate: '',
-          storeImageUrl: '',
-          address: '',
-          eastLongitude: '',
-          northLatitude: '',
+        this.$nextTick(() => {
+          this.form.setFieldsValue({
+            storeCode: '',
+            storeName: '',
+            contact: '',
+            commissionRate: '',
+            storeImageUrl: '',
+            address: '',
+            eastLongitude: '',
+            northLatitude: '',
+          })
         })
+
+        this.storeimgList = []
       },
       onConfirm() {
         this.form.validateFields((err, values) => {

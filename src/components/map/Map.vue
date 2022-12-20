@@ -27,6 +27,15 @@ export default {
       markerPosition: [116.397428, 39.90923]
     }
   },
+  // 鉴定地图位置变化，重新 init map
+  watch: {
+    center: {
+      deep: true,
+      handler() {
+        this.initMap()
+      }
+    }
+  },
   mounted() {
     this.initMap()
   },
