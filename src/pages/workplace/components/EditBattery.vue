@@ -20,7 +20,7 @@
           <a-form-item :label="$t('status')">
             <a-input
               v-decorator="['batteryStatus']"
-              :placeholder="`${$t('roleNamepl')}`"
+              :placeholder="$t('roleNamepl')"
             />
           </a-form-item>
         </a-col>

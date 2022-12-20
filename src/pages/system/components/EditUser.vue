@@ -127,9 +127,17 @@
       async getUserInfo() {
         let res = await GetUserInfo(this.userId)
         
-        let { userSex } = res.data
+        let {
+          userAccount,
+          userEmail,
+          userName,
+          userPhone, 
+          userSex
+         } = res.data
 
-        this.form.setFieldsValue({...res.data, userSex: userSex ? 'male' : 'female'});
+        this.$nextTick(() => {
+          this.form.setFieldsValue({userPhone, userName, userAccount, userEmail, userSex: userSex ? 'male' : 'female'});
+        })
       },
       handleCancel() {
         this.$emit('cancel')
@@ -146,6 +154,3 @@
     }
   }
 </script>
-
-<style scoped>
-</style>

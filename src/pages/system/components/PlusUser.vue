@@ -111,13 +111,15 @@
         this.$emit('cancel');
       },
       clearForm() {
-        this.form.setFieldsValue({
-          userAccount: '',
-          userName: '',
-          userPhone: '',
-          userPassword: '',
-          userSex: '',
-          userEmail: ''
+        this.$nextTick(() => {
+          this.form.setFieldsValue({
+            userAccount: '',
+            userName: '',
+            userPhone: '',
+            userPassword: '',
+            userSex: '',
+            userEmail: ''
+          })
         })
       }
     }

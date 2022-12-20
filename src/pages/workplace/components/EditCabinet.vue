@@ -68,8 +68,8 @@
       visible(newVal) {
         if (newVal) {
           this.init = true
+          this.clearForm()
           this.getQueryStores()
-          
         }
       }
     },
@@ -157,14 +157,20 @@
           const { chassisNumber, storeId } = result.data
           const { storeName } = this.stores.find(s => s.id === storeId)
 
-          this.form.setFieldsValue({ chassisNumber, storeName })
+          this.$nextTick(() => {
+            this.form.setFieldsValue({ chassisNumber, storeName })
+          })
         }
         catch {
           this.$emit('cancel')
           this.$message.error('查询机柜信息失败，请稍后重试！')
-          this.form.setFieldsValue({ chassisNumber: '', storeName: '' })
         }
       },
+      clearForm() {
+        this.$nextTick(() => {
+          this.form.setFieldsValue({ chassisNumber: '', storeName: '' })
+        })
+      }
     }
   }
 </script>

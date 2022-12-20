@@ -109,13 +109,18 @@
         let result = await GetRoleInfo(this.roleId)
 
         const { roleCode, roleName } = result.data
-        this.form.setFieldsValue({ roleCode, roleName })
+        this.$nextTick(() => {
+          this.form.setFieldsValue({ roleCode, roleName })
+        })
       },
       clearForm() {
-        this.form.setFieldsValue({
-          roleCode: '',
-          roleName: ''
+        this.$nextTick(() => {
+          this.form.setFieldsValue({
+            roleCode: '',
+            roleName: ''
+          })
         })
+        
       }
     }
   }

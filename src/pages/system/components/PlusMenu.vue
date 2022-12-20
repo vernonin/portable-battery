@@ -80,6 +80,7 @@
     watch: {
       visible(newVal) {
         if (newVal) {
+          this.clearForm()
           this.getParentTree()
         }
       }
@@ -92,7 +93,16 @@
         if (parnetId) {
           this.parentMenu = parnetId
         }
-        this.form.setFieldsValue(result.data)
+        const {
+          code,
+          menuName,
+          path,
+          sort
+        } = result.data
+
+        this.$nextTick(() => {
+          this.form.setFieldsValue({code, path, sort, menuName})
+        })
       },
       async getParentTree() {
         let result = await GetMenuTree()
@@ -173,7 +183,15 @@
         }
 
         this.confirmLoading = false
-      }
+      },
+      clearForm() {
+        this.$nextTick(() => {
+          this.form.setFieldsValue({
+            code: '', path: '', sort: '', menuName: ''
+          })
+          this.parentMenu = null
+        })
+      },
     }
   }
 </script>

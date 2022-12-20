@@ -24,7 +24,7 @@
       <div slot="power" slot-scope="battey">
         <a-progress
           :percent="(battey.power * 10)"
-          :status="battey.batteryStatus === 'FREE' ? 'active' : ''"
+          :status="battey.batteryStatus === 'FREE' ? 'active' : 'normal'"
           :stroke-color="battey.power <= 3 ? {
             '0%': '#FF4D52',
             '100%': '#FF4D52',
