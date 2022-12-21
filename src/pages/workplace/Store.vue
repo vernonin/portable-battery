@@ -172,7 +172,6 @@
         this.openEditStore = true
       },
       showImage(url) {
-        console.log(url)
         this.storeImageUrl = [url]
         setTimeout(() => {
           document.getElementById('viewer').click()

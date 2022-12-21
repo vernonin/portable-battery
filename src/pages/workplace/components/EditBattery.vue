@@ -71,7 +71,6 @@
         });
       },
       async plusBattery(data) {
-				console.log(data);
         await CreateBattery(data)
 
         this.$emit('cancel')

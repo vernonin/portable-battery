@@ -11,12 +11,8 @@
           <a-col :span="12">
             <a-form-item :label="$t('storeCode')">
               <a-input
-                v-decorator="[
-                  'storeCode',
-                  {
-                    rules: [{ required: true, message: $t('storeCodepl') }],
-                  },
-                ]"
+                v-decorator="['storeCode']"
+                disabled
                 :placeholder="$t('storeCodepl')"
               />
             </a-form-item>
@@ -77,7 +73,9 @@
                 name="img"
                 action="/api/system-server/upload/upload"
                 list-type="picture"
+                :remove="removeImage"
                 :file-list="storeimgList"
+                @change="changeImage"
               >
                 <a-button :block="true" style="width: 100%;"> <a-icon type="upload" />{{$t('clickUpload')}}</a-button>
               </a-upload>
@@ -187,6 +185,29 @@
         }
         return e && e.fileList[0].response?.data
       },
+      changeImage({file, fileList}) {
+
+        if (file.status === 'removed') {
+          this.storeimgList = []
+          this.form.setFieldsValue({
+            storeImageUrl: ''
+          })
+        } else {
+          this.storeimgList = fileList.slice(-1)
+        }
+      },
+      removeImage() {
+        this.storeimgList = []
+
+        this.form.setFieldsValue({
+          storeImageUrl: ''
+        })
+
+        return new Promise((resolve) => {
+          resolve()
+        })
+      },
+
       onMap(position) {
         this.$nextTick(() => {
           this.form.setFieldsValue({

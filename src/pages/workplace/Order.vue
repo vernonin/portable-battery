@@ -20,7 +20,7 @@
         <p class="item-info">结束时间：{{order.returnTime}}</p>
         <p class="item-info">应付款：{{order.payable}}</p>
         <p class="item-info">实付款：{{order.paidIn}}</p>
-        <p class="item-info">商家抽成：{{order.batteryNumber}}</p>
+        <p class="item-info">商家抽成：{{order.commissionRate}}</p>
       </div>
 
       <div slot="orderType" slot-scope="orderType">
@@ -30,8 +30,8 @@
       </div>
 
       <div slot="orderStatus" slot-scope="orderStatus">
-        <a-badge :status="orderStatus === 'RUNNING' ? 'processing' : 'default'" v-show="orderStatus"/>
-        {{orderStatus === 'RUNNING' ? '进行中' : orderStatus === 'END' ? '结束' : ''}}
+        <a-badge :status="orderStatus === 'RUNNING' ? 'processing' : orderStatus === 'NEED_PAY' ? 'error' : 'default'" v-show="orderStatus"/>
+        {{orderStatus === 'RUNNING' ? '进行中' : orderStatus === 'END' ? '结束' : orderStatus === 'NEED_PAY' ? '待支付' : ''}}
       </div>
     </a-table>
 
@@ -45,13 +45,13 @@
   import { GetOrders } from '@/services/order'
 
   const columns = [
-    { title: '订单编号', dataIndex: 'orderNumber', key: 'orderNumber', width: 120 },
-    { title: '所属商户', dataIndex: 'borrowStoreName', key: 'borrowStoreName', width: 120 },
+    { title: '订单编号', dataIndex: 'orderNumber', key: 'orderNumber', width: 160 },
+    { title: '所属商户', dataIndex: 'borrowStoreName', key: 'borrowStoreName', width: 130 },
     { title: '客户名称', dataIndex: 'customerName', key: 'customerName', width: 120, align: 'center' },
-    { title: '设备信息', dataIndex: '', key: 'deviceInfo', width: 160, scopedSlots: { customRender: 'deviceInfo' } },
+    { title: '设备信息', dataIndex: '', key: 'deviceInfo', width: 210, scopedSlots: { customRender: 'deviceInfo' } },
     { title: '订单类型', dataIndex: 'orderType', key: 'orderType', width: 100, scopedSlots: { customRender: 'orderType' } },
     { title: '订单信息', dataIndex: '', key: 'orderInfo', scopedSlots: { customRender: 'orderInfo' } },
-    { title: '订单状态', dataIndex: 'orderStatus', key: 'orderStatus', width: 120, align: 'center', scopedSlots: { customRender: 'orderStatus' } },
+    { title: '订单状态', dataIndex: 'orderStatus', key: 'orderStatus', width: 100, align: 'center', scopedSlots: { customRender: 'orderStatus' } },
   ]
 
   // 二维数组：第一层代表列，第二层代表每列的Form.Item
